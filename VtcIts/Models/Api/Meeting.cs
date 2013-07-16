@@ -20,6 +20,9 @@ namespace VtcIts.Models.Api {
         public int RequesterId { get; set; }
         public int? SeriesId { get; set; }
         public int Status { get; set; }
+        public bool SurveySent { get; set; }
+        public bool Billable { get; set; }
+
         public string StatusText {
             get { return ((MeetingStatus) Status).ToPrintText(); }
         }
@@ -70,6 +73,8 @@ namespace VtcIts.Models.Api {
                     RequesterId = source.RequesterId,
                     SeriesId =  source.SeriesId,
                     Status = (int)source.Status,
+                    SurveySent =  source.SurveySent,
+                    Billable = source.Billable,
                     KemtahTech = KemtahTech.GetKemtahTech(source.KemtahTech),
                     Requester = Person.GetPerson(source.Requester),
                     Participants = new HashSet<Participant>(),

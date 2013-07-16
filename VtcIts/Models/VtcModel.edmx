@@ -130,6 +130,7 @@
           <Property Name="UnknownParticipants_TravelAvoided" Type="int" Nullable="false" />
           <Property Name="UnknownParticipants_TravelMaybeAvoided" Type="int" Nullable="false" />
           <Property Name="UnknownParticipants_TravelNotAvoided" Type="int" Nullable="false" />
+          <Property Name="Billable" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="MeetingExternalLocations">
           <Key>
@@ -540,6 +541,7 @@
           <Property Type="Int32" Name="UnknownParticipants_TravelAvoided" Nullable="false" />
           <Property Type="Int32" Name="UnknownParticipants_TravelMaybeAvoided" Nullable="false" />
           <Property Type="Int32" Name="UnknownParticipants_TravelNotAvoided" Nullable="false" />
+          <Property Type="Boolean" Name="Billable" Nullable="false" />
         </EntityType>
         <EntityType Name="MeetingParticipant">
           <Key>
@@ -865,6 +867,7 @@
           <EntitySetMapping Name="Meetings">
             <EntityTypeMapping TypeName="VtcModel.Meeting">
               <MappingFragment StoreEntitySet="Meeting">
+                <ScalarProperty Name="Billable" ColumnName="Billable" />
                 <ScalarProperty Name="UnknownParticipants_TravelNotAvoided" ColumnName="UnknownParticipants_TravelNotAvoided" />
                 <ScalarProperty Name="UnknownParticipants_TravelMaybeAvoided" ColumnName="UnknownParticipants_TravelMaybeAvoided" />
                 <ScalarProperty Name="UnknownParticipants_TravelAvoided" ColumnName="UnknownParticipants_TravelAvoided" />

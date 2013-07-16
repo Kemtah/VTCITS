@@ -40,6 +40,7 @@ namespace VtcIts.Models
         public int UnknownParticipants_TravelAvoided { get; set; }
         public int UnknownParticipants_TravelMaybeAvoided { get; set; }
         public int UnknownParticipants_TravelNotAvoided { get; set; }
+        public bool Billable { get; set; }
     
         public virtual KemtahTech KemtahTech { get; set; }
         public virtual Person Requester { get; set; }

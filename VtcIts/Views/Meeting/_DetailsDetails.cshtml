@@ -64,6 +64,25 @@
             </div>
         </div>
     </div>
+    
+    <div style="width: 100%">
+        <div style="width: 60%; float: left;">
+            <div class='display-label'>
+                <label for='SurveySent'>Survey</label>
+            </div>
+            <div class='display-field'>
+                @(Model.SurveySent ? "Sent" : "Unsent")
+            </div>
+        </div>
+        <div style="width: 40%; float: left;">
+            <div class='display-label'>
+                <label for='Billable'>Billable?</label>
+            </div>
+            <div class='display-field'>
+                @(Model.Billable ? "Yes" : "No")
+            </div>
+        </div>
+    </div>
 
     <div class='display-label'>
         <label for='notes'>Notes</label>

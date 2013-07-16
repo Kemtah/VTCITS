@@ -246,6 +246,12 @@
             setRepeatMethodToggle();
         });
         
+
+        $('#isBillableCheckbox')
+        .change(function () {
+            $('#isBillableHidden').val($(this).prop('checked'));
+        });
+
     }
 
 
@@ -447,30 +453,72 @@
             </div>
         </div>
     </div>
+    
+    <div style="width: 100%">
+        <div style="width: 60%; float: left;">
+            <div class='display-label'>
+                <label for='SurveySent'>Survey</label>
+            </div>
+            <div class='display-field'>
+                @if (Model.SurveySent) {
+                    <text>Sent</text>
+                } else {
+                    if (Model.Status == MeetingStatus.Closed && !Model.SurveySent) {
+                        using (Html.BeginForm("SendSurvey", "Meeting",
+                                              method: FormMethod.Post,
+                                              routeValues: new {meetingId = Model.Id},
+                                              htmlAttributes: new {style = "float:left;"}
+                            )) {
+                            @Html.AntiForgeryToken()
+                            <a class="buttonLink" onclick=' $(this).closest("form").submit(); ' title="Send the Survey to this Meeting's Participants">
+                                <img class="buttonLink" src="/Images/icons/Mail/Mail_16x16.png" alt="Send Survey" />Send Survey
+                            </a>
+                        }
+                    } else {
+                        <text>Unsent</text>
+                    }
+                }
+            </div>
+        </div>
+        <div style="width: 40%; float: left;">
+            <div class='display-label'>
+                <label for='Billable'>Billable?</label>
+            </div>
+            <div class='display-field'>
+                @(Model.Billable ? "Yes" : "No")
+            </div>
+        </div>
+    </div>
+    
 
     <div class='display-label'>
         <label for='notes'>Notes</label>
     </div>
     <div class='display-field'>
-        @Html.Raw(Model.Notes.Replace(Environment.NewLine,"<br/>"))
+        @Html.Raw(Model.Notes.Replace(Environment.NewLine, "<br/>"))
     </div>
 </fieldset>
 
 <div style="clear: both; padding-top: 10px">
-    @if (Model.IsEditable()) {
+    @if (Model.IsEditable())
+    {
         <div style="float: left;">
             <a id="editDetailsLink" class="buttonLink" title="Edit this Meeting's details">
                 <img class="buttonLink" src="/Images/icons/Edit/Edit_16x16.png" alt="Edit Meeting Details" />Edit
             </a>
         </div>
     }
-    @if (Model.IsEditable()) {
+    @if (Model.IsEditable())
+    {
         <div style="float: left;">
-            @if (!Model.SeriesId.HasValue) {
+            @if (!Model.SeriesId.HasValue)
+            {
                 <a id="setRecurrenceLink" class="buttonLink" title="Setup Recurrence for this Meeting">
                     <img class="buttonLink" src="/Images/icons/Synchronize/Synchronize_16x16.png" alt="Set Recurrence" />Set Recurrence
                 </a>
-            } else {
+            }
+            else
+            {
                 <a id="deleteRecurrenceLink" class="buttonLink" title="Delete this Meeting's Recurrence">
                     <img class="buttonLink" src="/Images/icons/Delete/Delete_16x16.png" alt="Delete Recurrence" />Delete Recurrence
                 </a>
@@ -478,18 +526,7 @@
         </div>
     }
     <div style="float:left;">
-        @if (Model.Status == MeetingStatus.Closed && !Model.SurveySent) {
-            using (Html.BeginForm("SendSurvey", "Meeting",
-                                  method: FormMethod.Post,
-                                  routeValues: new { meetingId = Model.Id },
-                                  htmlAttributes: new { style = "float:left;" }
-                )) {
-                @Html.AntiForgeryToken()
-                <a class="buttonLink" onclick='$(this).closest("form").submit();' title="Send the Survey to this Meeting's Participants">
-                    <img class="buttonLink" src="/Images/icons/Mail/Mail_16x16.png" alt="Send Survey" />Send Survey
-                </a>
-            }
-        }
+        
     </div>
 </div>
 
@@ -550,6 +587,15 @@
             </div>
             <div class='editor-field'>
                 <select id='detailsKemtahTechList' name='techId'></select>
+            </div>
+            
+            <div class='editor-label'>
+                <label for='isBillable'>Billable?</label>
+            </div>
+            <div class='editor-field'>
+                <input type="hidden" id="isBillableHidden" name="isBillable" value="@Model.Billable.ToString()" />
+                <input type="checkbox" id="isBillableCheckbox" @(Model.Billable ? "checked='checked'" : "") />  &nbsp;
+                
             </div>
 
             <div class='editor-label'>

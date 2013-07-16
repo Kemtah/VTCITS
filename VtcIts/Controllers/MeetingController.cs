@@ -128,6 +128,7 @@ namespace VtcIts.Controllers
 			string description,
 			string footprintsTicket,
 			int techId,
+			bool isBillable,
 			string notes
 		) {
 			var meeting = db.Meetings.Find(meetingId);
@@ -138,6 +139,7 @@ namespace VtcIts.Controllers
 			meeting.TechnicianId = techId;
 			meeting.Start = DateTime.Parse(startDateTime);
 			meeting.End = DateTime.Parse(endDateTime);
+			meeting.Billable = isBillable;
 
 			db.Entry(meeting).State = EntityState.Modified;
 			db.SaveChanges();

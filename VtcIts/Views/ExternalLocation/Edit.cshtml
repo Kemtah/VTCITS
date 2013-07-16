@@ -1,0 +1,70 @@
+﻿@model VtcIts.Models.ExternalLocation
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>ExternalLocation</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IpAddress)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IpAddress)
+            @Html.ValidationMessageFor(model => model.IpAddress)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PointOfContact)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PointOfContact)
+            @Html.ValidationMessageFor(model => model.PointOfContact)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TechnicalContactPhone)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TechnicalContactPhone)
+            @Html.ValidationMessageFor(model => model.TechnicalContactPhone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TechnicalContactEmail)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TechnicalContactEmail)
+            @Html.ValidationMessageFor(model => model.TechnicalContactEmail)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

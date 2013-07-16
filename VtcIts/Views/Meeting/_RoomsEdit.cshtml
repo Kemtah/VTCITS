@@ -1,0 +1,160 @@
+﻿@model VtcIts.Models.Meeting
+
+<script>
+    var availableRoomsUrl = 
+
+        '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})' + '/AvailableBuildings';
+	
+	// ------------------------------------------------------------------------
+	// For calling in $()
+	// ------------------------------------------------------------------------
+	function initialize_Rooms() {
+		var meetingId = "@Model.Id";
+
+		fillBuildingList(meetingId);
+		fillRoomList(meetingId, $('#newMeeting_BuildingList').val());
+		
+		$.getJSON(availableRoomsUrl, function (data) {
+			$("#addMeetingRoomFooter").toggle(data.length > 0);
+		});
+
+		$('#newMeeting_BuildingList').change(function () {
+			var buildingId = $('#newMeeting_BuildingList').val();
+			fillRoomList(meetingId, buildingId);
+		});
+
+		$('.deleteRoomLink')
+		.click(function () {
+			$(this).closest('form').submit();
+		});
+
+		$("#addMeetingRoom")
+		.dialog({
+			autoOpen: false,
+			modal: true,
+			resizable: false,
+		  //  width: 400,
+			buttons: {
+				"Add": function () {
+					$("#addMeetingRoomForm").submit();
+					$(this).dialog("close");
+				},
+				Cancel: function () {
+					$(this).dialog("close");
+				}
+			},
+			close: function () {}
+		});
+
+		$("#addMeetingRoomLink")
+		.click(function () {
+			$("#addMeetingRoom").dialog("open");
+		});
+	}
+	
+
+	// ------------------------------------------------------------------------
+	// Populates the building list with viable buildings for this meeting
+	// ------------------------------------------------------------------------
+	function fillBuildingList(meetingId) {
+		var options = $('#newMeeting_BuildingList');
+		options.empty();
+		$.getJSON(availableRoomsUrl, function (data) {
+			$.each(data, function (index, item) {
+				options.append($("<option />").val(item.Id).text(item.Name));
+			});
+			fillRoomList(meetingId, options.val());
+		});
+	}
+
+
+	// ------------------------------------------------------------------------
+	// Populates the building list with viable rooms for this meeting
+	// ------------------------------------------------------------------------
+	function fillRoomList(meetingId, buildingId) {
+		if (buildingId != null) {
+			var apiUrl =
+				'@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})' +
+					'/AvailableRooms/' + buildingId;
+			//var apiUrl = '/api/Meeting/' + meetingId + '/AvailableRooms/' + buildingId;
+			var options = $("#newMeeting_RoomList");
+			options.empty();
+			$.getJSON(apiUrl, function(data) {
+				$.each(data, function(index, item) {
+					options.append($("<option />").val(item.Id).text(item.Name));
+				});
+			});
+		}
+	}
+
+</script>
+
+
+<h3>ANL Conference Rooms</h3> 
+ 
+<table>
+	<thead>
+		<tr>
+			<th>Building</th>
+			<th>Room</th>
+			<th> </th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Rooms) {
+			<tr>
+				<td>@Html.DisplayFor(modelItem => item.Building.Name)</td>
+				<td>@Html.DisplayFor(modelItem => item.Name)</td>
+				<td>
+					@using (Html.BeginForm(
+						"DeleteRoom","Meeting", 
+						new { meetingId=Model.Id, roomId=item.Id },
+						FormMethod.Post
+					)) {
+						@Html.AntiForgeryToken()
+						<a class="buttonLink deleteRoomLink" title="Remove @(item.Building.Name)-@(item.Name) from the meeting"><img class="deleteButton" src="/Images/icons/Delete/Delete_16x16.png" alt="Delete"/></a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot id="addMeetingRoomFooter">
+		<tr>
+			<td colspan="3">
+				<a id="addMeetingRoomLink" class="buttonLink" title="Add an ANL Conference Room">
+					<img class="buttonLink" src="/Images/icons/Add/Add_16x16.png" alt="Add" />Add
+				</a>
+			</td>
+		</tr> 
+	</tfoot>
+</table>
+
+<div id="addMeetingRoom" title="Add ANL Conference Room">
+	@using (Html.BeginForm("AddRoom", "Meeting", 
+		method: FormMethod.Post,
+		routeValues: new { meetingId = Model.Id },
+		htmlAttributes: new {id="addMeetingRoomForm"}
+	)) {
+		@Html.AntiForgeryToken()
+
+		<fieldset>
+			<legend>Add ANL Conference Room</legend>
+			<div style="float: left;">
+				<div class="editor-label">
+					<label for="newMeeting_BuildingList">Building</label>
+				</div>
+				<div class="editor-field">
+					<select id="newMeeting_BuildingList"></select>
+				</div>
+			</div>
+			<div style="float: left;">
+				<div class="editor-label">
+					<label for="newMeeting_RoomList">Room</label>
+				</div>
+				<div class="editor-field">
+					<select id="newMeeting_RoomList" name="roomId"></select>
+				</div>
+			</div>
+		</fieldset>
+	}
+</div>

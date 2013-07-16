@@ -1,0 +1,54 @@
+﻿@model VtcIts.Models.ExternalLocation
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>ExternalLocation</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IpAddress)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IpAddress)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PointOfContact)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PointOfContact)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TechnicalContactPhone)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TechnicalContactPhone)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TechnicalContactEmail)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TechnicalContactEmail)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

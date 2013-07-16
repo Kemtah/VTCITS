@@ -1,0 +1,74 @@
+﻿@using VtcIts
+@using VtcIts.Models
+@model VtcIts.Models.Meeting
+
+
+<div style="vertical-align: top;height: 30px;">
+<h3><b>@Model.Start.ToString("MM/dd/yyyy")</b> - 
+        <b>@Model.Start.ToString("hh:mm tt")</b> to  
+    <b>@Model.End.ToString("hh:mm tt")</b> CST</h3> 
+</div>
+<fieldset>
+    <legend>Meeting</legend>
+    <div class='display-label' style="float:left;padding-right: 20px;">
+        <label for='id'>ID</label>
+    </div>
+    <div class='display-field' style="float:left;">@Model.Id</div>
+
+
+    <div class='display-label' style="clear:both;">
+        <label for='description'>Description</label>
+    </div>
+    <div class='display-field'>
+        @Html.Raw(Model.Description.Replace(Environment.NewLine,"<br/>"))
+    </div>
+    
+    <div style="width: 100%">
+        <div style="width: 60%; float: left;">
+            <div class='display-label'>
+                <label for='description'>Status</label>
+            </div>
+            <div class='display-field'>
+                @Model.GetStatusText()
+            </div>
+        </div>
+        <div style="width: 40%; float: left;">
+            <div class='display-label'>
+                <label for='description'>Source</label>
+            </div>
+            <div class='display-field'>
+                @Model.Source.ToPrintText()
+            </div>
+        </div>
+    </div>
+    
+    <div style="width: 100%">
+        <div style="width: 60%; float: left;">
+            <div class='display-label'>
+                <label for='detailsKemtahTechList'>Kemtah Technician</label>
+            </div>
+            <div class='display-field'>
+                @if (Model.TechnicianId != -1) {
+                    @(Model.KemtahTech.FirstName + " " + Model.KemtahTech.LastName)
+                } else {
+                    <span style="color: red;">No Techician Assigned</span>
+                }
+            </div>
+        </div>
+        <div style="width: 40%; float: left;">
+            <div class='display-label' style="clear:both;">
+                <label for='footprintsTicket'>Footprints</label>
+            </div>
+            <div class='display-field'>
+                @Model.FootprintsTicket
+            </div>
+        </div>
+    </div>
+
+    <div class='display-label'>
+        <label for='notes'>Notes</label>
+    </div>
+    <div class='display-field'>
+        @Html.Raw(Model.Notes.Replace(Environment.NewLine,"<br/>"))
+    </div>
+</fieldset>

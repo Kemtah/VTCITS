@@ -1,0 +1,95 @@
+﻿@using VtcIts
+@using VtcIts.Models
+@model VtcIts.Models.Meeting
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/mousewheel")
+    @Scripts.Render("~/bundles/timespinner")
+    @Scripts.Render("~/bundles/rrule")
+
+    <script>
+        var now = new Date();
+        var today = new Date('@(DateTime.Now.ToString("MM/dd/yyyy"))');
+        var tomorrow = new Date('@(DateTime.Now.AddDays(1).ToString("MM/dd/yyyy"))');
+        var maxDate = new Date(2014, 12, 31);
+        var eventDay = new Date('@Model.Start.ToString("MM/dd/yyyy")');
+
+
+        $(function () {
+            initialize_Details();
+            initialize_Rooms();
+            initialize_ExLocations();
+            initialize_Participants();
+            initialize_Requester();
+        });
+
+
+        function enable(toToggle, enabled) {
+            var disabled = 'disabled';
+            var disabledColor = '#F3F3f3';
+            var enabledColor = '#FFFFFF';
+            var backgroundColor = 'background-color';
+
+            if (enabled) {
+                toToggle
+                    .css(backgroundColor, enabledColor)
+                    .removeAttr(disabled);
+            } else {
+                toToggle
+                    .attr(disabled, disabled)
+                    .css(backgroundColor, disabledColor);
+            }
+        }
+
+
+        function breakNewLines(input) {
+            return input.replace("\n", "\n<br/>");
+        }
+
+    </script>
+}
+<style>
+    div.outerSection {
+        float: left;
+        width: 450px;
+        padding: 0 10px;
+    }
+
+    div.innerSection {
+        clear: both;
+        width: 100%;      
+    }
+</style>
+
+<div style="clear:both; text-align:center;">
+    <h2>@Model.Title</h2>
+</div>
+
+<div class="outerSection" >
+    <div class="innerSection">
+        @Html.Partial("_DetailsEdit", Model)
+    </div>
+    <div class="innerSection">
+        @Html.Partial((Model.IsEditable()) ? "_RequesterEdit" : "_RequesterDetails", Model)
+    </div>
+    
+</div>
+<div class="outerSection">
+    <div class="innerSection">
+        @Html.Partial((Model.IsEditable()) ? "_ParticipantsEdit" : "_ParticipantsDetails", Model)
+    </div>
+    <div class="innerSection">
+        @Html.Partial((Model.IsEditable()) ? "_RoomsEdit" : "_RoomsDetails", Model)
+    </div>
+</div>
+<div class="outerSection">
+     <div class="innerSection">
+        @Html.Partial((Model.IsEditable()) ? "_ExLocationsEdit" : "_ExLocationsDetails", Model)
+    </div>
+</div>
+<div style="clear:both; text-align: center;">
+    @Html.ActionLink("Done", "Details", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index", "Home")
+</div>

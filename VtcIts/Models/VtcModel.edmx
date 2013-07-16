@@ -1,0 +1,1114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VtcModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="VtcModelStoreContainer">
+          <EntitySet Name="Building" EntityType="VtcModel.Store.Building" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ExternalLocation" EntityType="VtcModel.Store.ExternalLocation" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="KemtahTech" EntityType="VtcModel.Store.KemtahTech" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Location" EntityType="VtcModel.Store.Location" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Meeting" EntityType="VtcModel.Store.Meeting" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MeetingExternalLocations" EntityType="VtcModel.Store.MeetingExternalLocations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MeetingParticipants" EntityType="VtcModel.Store.MeetingParticipants" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MeetingRooms" EntityType="VtcModel.Store.MeetingRooms" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MeetingSeries" EntityType="VtcModel.Store.MeetingSeries" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Person" EntityType="VtcModel.Store.Person" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Room" EntityType="VtcModel.Store.Room" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Settings" EntityType="VtcModel.Store.Settings" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Building_Location" Association="VtcModel.Store.FK_Building_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Building" EntitySet="Building" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Meeting_KemtahTech" Association="VtcModel.Store.FK_Meeting_KemtahTech">
+            <End Role="KemtahTech" EntitySet="KemtahTech" />
+            <End Role="Meeting" EntitySet="Meeting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Meeting_MeetingSeries" Association="VtcModel.Store.FK_Meeting_MeetingSeries">
+            <End Role="MeetingSeries" EntitySet="MeetingSeries" />
+            <End Role="Meeting" EntitySet="Meeting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Meeting_Person" Association="VtcModel.Store.FK_Meeting_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Meeting" EntitySet="Meeting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingExternalLocations_ExternalLocation" Association="VtcModel.Store.FK_MeetingExternalLocations_ExternalLocation">
+            <End Role="ExternalLocation" EntitySet="ExternalLocation" />
+            <End Role="MeetingExternalLocations" EntitySet="MeetingExternalLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingExternalLocations_Meeting" Association="VtcModel.Store.FK_MeetingExternalLocations_Meeting">
+            <End Role="Meeting" EntitySet="Meeting" />
+            <End Role="MeetingExternalLocations" EntitySet="MeetingExternalLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingParticipants_Meeting" Association="VtcModel.Store.FK_MeetingParticipants_Meeting">
+            <End Role="Meeting" EntitySet="Meeting" />
+            <End Role="MeetingParticipants" EntitySet="MeetingParticipants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingParticipants_Person" Association="VtcModel.Store.FK_MeetingParticipants_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="MeetingParticipants" EntitySet="MeetingParticipants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingRooms_Meeting" Association="VtcModel.Store.FK_MeetingRooms_Meeting">
+            <End Role="Meeting" EntitySet="Meeting" />
+            <End Role="MeetingRooms" EntitySet="MeetingRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingRooms_Room" Association="VtcModel.Store.FK_MeetingRooms_Room">
+            <End Role="Room" EntitySet="Room" />
+            <End Role="MeetingRooms" EntitySet="MeetingRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_Building" Association="VtcModel.Store.FK_Person_Building">
+            <End Role="Building" EntitySet="Building" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_Location" Association="VtcModel.Store.FK_Person_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Room_Building" Association="VtcModel.Store.FK_Room_Building">
+            <End Role="Building" EntitySet="Building" />
+            <End Role="Room" EntitySet="Room" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Building">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LocationId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ExternalLocation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="IpAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="PointOfContact" Type="nvarchar" MaxLength="50" />
+          <Property Name="TechnicalContactPhone" Type="nvarchar" MaxLength="25" />
+          <Property Name="TechnicalContactEmail" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="KemtahTech">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="KemtahId" Type="char" Nullable="false" MaxLength="8" />
+          <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Meeting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="End" Type="datetime" Nullable="false" />
+          <Property Name="Description" Type="ntext" />
+          <Property Name="Notes" Type="ntext" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Source" Type="int" Nullable="false" />
+          <Property Name="FootprintsTicket" Type="nvarchar" MaxLength="50" />
+          <Property Name="TechnicianId" Type="int" Nullable="false" />
+          <Property Name="RequesterId" Type="int" Nullable="false" />
+          <Property Name="SeriesId" Type="int" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="Started" Type="datetime" />
+          <Property Name="Closed" Type="datetime" />
+          <Property Name="SurveySent" Type="bit" Nullable="false" />
+          <Property Name="UnknownParticipants_TravelAvoided" Type="int" Nullable="false" />
+          <Property Name="UnknownParticipants_TravelMaybeAvoided" Type="int" Nullable="false" />
+          <Property Name="UnknownParticipants_TravelNotAvoided" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeetingExternalLocations">
+          <Key>
+            <PropertyRef Name="MeetingId" />
+            <PropertyRef Name="ExternalLocationId" />
+          </Key>
+          <Property Name="MeetingId" Type="int" Nullable="false" />
+          <Property Name="ExternalLocationId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeetingParticipants">
+          <Key>
+            <PropertyRef Name="MeetingId" />
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="MeetingId" Type="int" Nullable="false" />
+          <Property Name="PersonId" Type="int" Nullable="false" />
+          <Property Name="Attended" Type="bit" Nullable="false" />
+          <Property Name="TravelAvoided" Type="int" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeetingRooms">
+          <Key>
+            <PropertyRef Name="MeetingId" />
+            <PropertyRef Name="RoomId" />
+          </Key>
+          <Property Name="MeetingId" Type="int" Nullable="false" />
+          <Property Name="RoomId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeetingSeries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="RuleText" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BadgeNumber" Type="nvarchar" MaxLength="6" />
+          <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="25" />
+          <Property Name="LocationId" Type="int" Nullable="false" />
+          <Property Name="BuildingId" Type="int" />
+        </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="BuildingId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="VtcEnabled" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="RegistrationAllowed" Type="bit" Nullable="false" />
+          <Property Name="EmailEnabled" Type="bit" Nullable="false" />
+          <Property Name="SurveyLink" Type="ntext" Nullable="false" />
+          <Property Name="SystemMailName" Type="nvarchar" Nullable="false" MaxLength="250" />
+          <Property Name="SystemMailAddress" Type="nvarchar" Nullable="false" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_Building_Location">
+          <End Role="Location" Type="VtcModel.Store.Location" Multiplicity="1" />
+          <End Role="Building" Type="VtcModel.Store.Building" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Building">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Meeting_KemtahTech">
+          <End Role="KemtahTech" Type="VtcModel.Store.KemtahTech" Multiplicity="1" />
+          <End Role="Meeting" Type="VtcModel.Store.Meeting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KemtahTech">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting">
+              <PropertyRef Name="TechnicianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Meeting_MeetingSeries">
+          <End Role="MeetingSeries" Type="VtcModel.Store.MeetingSeries" Multiplicity="0..1" />
+          <End Role="Meeting" Type="VtcModel.Store.Meeting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeetingSeries">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting">
+              <PropertyRef Name="SeriesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Meeting_Person">
+          <End Role="Person" Type="VtcModel.Store.Person" Multiplicity="1" />
+          <End Role="Meeting" Type="VtcModel.Store.Meeting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting">
+              <PropertyRef Name="RequesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingExternalLocations_ExternalLocation">
+          <End Role="ExternalLocation" Type="VtcModel.Store.ExternalLocation" Multiplicity="1" />
+          <End Role="MeetingExternalLocations" Type="VtcModel.Store.MeetingExternalLocations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExternalLocation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingExternalLocations">
+              <PropertyRef Name="ExternalLocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingExternalLocations_Meeting">
+          <End Role="Meeting" Type="VtcModel.Store.Meeting" Multiplicity="1" />
+          <End Role="MeetingExternalLocations" Type="VtcModel.Store.MeetingExternalLocations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Meeting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingExternalLocations">
+              <PropertyRef Name="MeetingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingParticipants_Meeting">
+          <End Role="Meeting" Type="VtcModel.Store.Meeting" Multiplicity="1" />
+          <End Role="MeetingParticipants" Type="VtcModel.Store.MeetingParticipants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Meeting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingParticipants">
+              <PropertyRef Name="MeetingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingParticipants_Person">
+          <End Role="Person" Type="VtcModel.Store.Person" Multiplicity="1" />
+          <End Role="MeetingParticipants" Type="VtcModel.Store.MeetingParticipants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingParticipants">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingRooms_Meeting">
+          <End Role="Meeting" Type="VtcModel.Store.Meeting" Multiplicity="1" />
+          <End Role="MeetingRooms" Type="VtcModel.Store.MeetingRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Meeting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingRooms">
+              <PropertyRef Name="MeetingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingRooms_Room">
+          <End Role="Room" Type="VtcModel.Store.Room" Multiplicity="1" />
+          <End Role="MeetingRooms" Type="VtcModel.Store.MeetingRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingRooms">
+              <PropertyRef Name="RoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_Building">
+          <End Role="Building" Type="VtcModel.Store.Building" Multiplicity="0..1" />
+          <End Role="Person" Type="VtcModel.Store.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="BuildingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_Location">
+          <End Role="Location" Type="VtcModel.Store.Location" Multiplicity="1" />
+          <End Role="Person" Type="VtcModel.Store.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Room_Building">
+          <End Role="Building" Type="VtcModel.Store.Building" Multiplicity="1" />
+          <End Role="Room" Type="VtcModel.Store.Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="BuildingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AvailableBadgeNumbers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingId" Type="int" Mode="In" />
+          <Parameter Name="SearchTerm" Type="varchar" Mode="In" />
+          <Parameter Name="MaxResults" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AvailableBuildings" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AvailableEmails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingId" Type="int" Mode="In" />
+          <Parameter Name="SearchTerm" Type="varchar" Mode="In" />
+          <Parameter Name="MaxResults" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AvailableExLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AvailablePeople" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AvailableRooms" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingId" Type="int" Mode="In" />
+          <Parameter Name="BuildingId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetDetailedReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetSettings" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetSummaryReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VtcModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="VtcContext" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Buildings" EntityType="VtcModel.Building" />
+          <EntitySet Name="ExternalLocations" EntityType="VtcModel.ExternalLocation" />
+          <EntitySet Name="KemtahTeches" EntityType="VtcModel.KemtahTech" />
+          <EntitySet Name="Locations" EntityType="VtcModel.Location" />
+          <EntitySet Name="Meetings" EntityType="VtcModel.Meeting" />
+          <EntitySet Name="MeetingParticipants" EntityType="VtcModel.MeetingParticipant" />
+          <EntitySet Name="People" EntityType="VtcModel.Person" />
+          <EntitySet Name="Rooms" EntityType="VtcModel.Room" />
+          <AssociationSet Name="FK_Building_Location" Association="VtcModel.FK_Building_Location">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Building" EntitySet="Buildings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Room_Building" Association="VtcModel.FK_Room_Building">
+            <End Role="Building" EntitySet="Buildings" />
+            <End Role="Room" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Meeting_KemtahTech" Association="VtcModel.FK_Meeting_KemtahTech">
+            <End Role="KemtahTech" EntitySet="KemtahTeches" />
+            <End Role="Meeting" EntitySet="Meetings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Meeting_Person" Association="VtcModel.FK_Meeting_Person">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Meeting" EntitySet="Meetings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingParticipants_Meeting" Association="VtcModel.FK_MeetingParticipants_Meeting">
+            <End Role="Meeting" EntitySet="Meetings" />
+            <End Role="MeetingParticipant" EntitySet="MeetingParticipants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MeetingParticipants_Person" Association="VtcModel.FK_MeetingParticipants_Person">
+            <End Role="Person" EntitySet="People" />
+            <End Role="MeetingParticipant" EntitySet="MeetingParticipants" />
+          </AssociationSet>
+          <AssociationSet Name="MeetingExternalLocations" Association="VtcModel.MeetingExternalLocations">
+            <End Role="ExternalLocation" EntitySet="ExternalLocations" />
+            <End Role="Meeting" EntitySet="Meetings" />
+          </AssociationSet>
+          <AssociationSet Name="MeetingRooms" Association="VtcModel.MeetingRooms">
+            <End Role="Meeting" EntitySet="Meetings" />
+            <End Role="Room" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_Building" Association="VtcModel.FK_Person_Building">
+            <End Role="Building" EntitySet="Buildings" />
+            <End Role="Person" EntitySet="People" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_Location" Association="VtcModel.FK_Person_Location">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Person" EntitySet="People" />
+          </AssociationSet>
+          <EntitySet Name="Series" EntityType="VtcModel.Series" />
+          <AssociationSet Name="FK_Meeting_MeetingSeries" Association="VtcModel.FK_Meeting_MeetingSeries">
+            <End Role="MeetingSery" EntitySet="Series" />
+            <End Role="Meeting" EntitySet="Meetings" />
+          </AssociationSet>
+          <EntitySet Name="Settings" EntityType="VtcModel.Setting" />
+          <FunctionImport Name="AvailableBuildings" ReturnType="Collection(VtcModel.AvailableBuildings_Result)">
+          <Parameter Name="MeetingId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AvailablePeople" ReturnType="Collection(VtcModel.AvailablePeople_Result)">
+          <Parameter Name="MeetingId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AvailableRooms" ReturnType="Collection(VtcModel.AvailableRooms_Result)">
+            <Parameter Name="MeetingId" Mode="In" Type="Int32" />
+            <Parameter Name="BuildingId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AvailableExLocations" ReturnType="Collection(VtcModel.AvailableExLocations_Result)">
+          <Parameter Name="MeetingId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AvailableBadgeNumbers" ReturnType="Collection(VtcModel.AvailableBadgeNumbers_Result)">
+            <Parameter Name="MeetingId" Mode="In" Type="Int32" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+            <Parameter Name="MaxResults" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AvailableEmails" ReturnType="Collection(VtcModel.AvailableEmails_Result)">
+            <Parameter Name="MeetingId" Mode="In" Type="Int32" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+            <Parameter Name="MaxResults" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetDetailedReport" ReturnType="Collection(VtcModel.GetDetailedReport_Result)" />
+          <FunctionImport Name="GetSummaryReport" ReturnType="Collection(VtcModel.GetSummaryReport_Result)" />
+          <FunctionImport Name="GetSettings" ReturnType="Collection(VtcModel.GetSettings_Result)" />
+        </EntityContainer>
+        <EntityType Name="Building">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LocationId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Location" Relationship="VtcModel.FK_Building_Location" FromRole="Building" ToRole="Location" />
+          <NavigationProperty Name="Rooms" Relationship="VtcModel.FK_Room_Building" FromRole="Building" ToRole="Room" />
+          <NavigationProperty Name="People" Relationship="VtcModel.FK_Person_Building" FromRole="Building" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="ExternalLocation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="IpAddress" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PointOfContact" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TechnicalContactPhone" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="TechnicalContactEmail" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Meetings" Relationship="VtcModel.MeetingExternalLocations" FromRole="ExternalLocation" ToRole="Meeting" />
+        </EntityType>
+        <EntityType Name="KemtahTech">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="KemtahId" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Meetings" Relationship="VtcModel.FK_Meeting_KemtahTech" FromRole="KemtahTech" ToRole="Meeting" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Buildings" Relationship="VtcModel.FK_Building_Location" FromRole="Location" ToRole="Building" />
+          <NavigationProperty Name="People" Relationship="VtcModel.FK_Person_Location" FromRole="Location" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="Meeting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="Start" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="End" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Notes" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="VtcModel.MeetingRequestSource" Name="Source" Nullable="false" />
+          <Property Type="String" Name="FootprintsTicket" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="TechnicianId" Nullable="false" />
+          <Property Type="Int32" Name="RequesterId" Nullable="false" />
+          <NavigationProperty Name="KemtahTech" Relationship="VtcModel.FK_Meeting_KemtahTech" FromRole="Meeting" ToRole="KemtahTech" />
+          <NavigationProperty Name="Requester" Relationship="VtcModel.FK_Meeting_Person" FromRole="Meeting" ToRole="Person" />
+          <NavigationProperty Name="MeetingParticipants" Relationship="VtcModel.FK_MeetingParticipants_Meeting" FromRole="Meeting" ToRole="MeetingParticipant" />
+          <NavigationProperty Name="ExternalLocations" Relationship="VtcModel.MeetingExternalLocations" FromRole="Meeting" ToRole="ExternalLocation" />
+          <NavigationProperty Name="Rooms" Relationship="VtcModel.MeetingRooms" FromRole="Meeting" ToRole="Room" />
+          <Property Type="Int32" Name="SeriesId" />
+          <NavigationProperty Name="MeetingSeries" Relationship="VtcModel.FK_Meeting_MeetingSeries" FromRole="Meeting" ToRole="MeetingSery" />
+          <Property Type="VtcModel.MeetingStatus" Name="Status" Nullable="false" />
+          <Property Type="DateTime" Name="Created" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="Started" Precision="3" />
+          <Property Type="DateTime" Name="Closed" Precision="3" />
+          <Property Type="Boolean" Name="SurveySent" Nullable="false" />
+          <Property Type="Int32" Name="UnknownParticipants_TravelAvoided" Nullable="false" />
+          <Property Type="Int32" Name="UnknownParticipants_TravelMaybeAvoided" Nullable="false" />
+          <Property Type="Int32" Name="UnknownParticipants_TravelNotAvoided" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MeetingParticipant">
+          <Key>
+            <PropertyRef Name="MeetingId" />
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Type="Int32" Name="MeetingId" Nullable="false" />
+          <Property Type="Int32" Name="PersonId" Nullable="false" />
+          <Property Type="Boolean" Name="Attended" Nullable="false" />
+          <Property Type="VtcModel.Ternary" Name="TravelAvoided" Nullable="false" />
+          <Property Type="VtcModel.ParticipantType" Name="Type" Nullable="false" />
+          <NavigationProperty Name="Meeting" Relationship="VtcModel.FK_MeetingParticipants_Meeting" FromRole="MeetingParticipant" ToRole="Meeting" />
+          <NavigationProperty Name="Person" Relationship="VtcModel.FK_MeetingParticipants_Person" FromRole="MeetingParticipant" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="BadgeNumber" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Name="LastName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" Type="String" />
+          <Property Type="String" Name="Phone" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="LocationId" Nullable="false" />
+          <Property Type="Int32" Name="BuildingId" />
+          <NavigationProperty Name="RequestedMeetings" Relationship="VtcModel.FK_Meeting_Person" FromRole="Person" ToRole="Meeting" />
+          <NavigationProperty Name="MeetingParticipants" Relationship="VtcModel.FK_MeetingParticipants_Person" FromRole="Person" ToRole="MeetingParticipant" />
+          <NavigationProperty Name="Building" Relationship="VtcModel.FK_Person_Building" FromRole="Person" ToRole="Building" />
+          <NavigationProperty Name="Location" Relationship="VtcModel.FK_Person_Location" FromRole="Person" ToRole="Location" />
+        </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="BuildingId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Building" Relationship="VtcModel.FK_Room_Building" FromRole="Room" ToRole="Building" />
+          <NavigationProperty Name="Meetings" Relationship="VtcModel.MeetingRooms" FromRole="Room" ToRole="Meeting" />
+          <Property Type="Boolean" Name="VtcEnabled" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Building_Location">
+          <End Type="VtcModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="VtcModel.Building" Role="Building" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Building">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Room_Building">
+          <End Type="VtcModel.Building" Role="Building" Multiplicity="1" />
+          <End Type="VtcModel.Room" Role="Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="BuildingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Meeting_KemtahTech">
+          <End Type="VtcModel.KemtahTech" Role="KemtahTech" Multiplicity="1" />
+          <End Type="VtcModel.Meeting" Role="Meeting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KemtahTech">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting">
+              <PropertyRef Name="TechnicianId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Meeting_Person">
+          <End Type="VtcModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="VtcModel.Meeting" Role="Meeting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting">
+              <PropertyRef Name="RequesterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingParticipants_Meeting">
+          <End Type="VtcModel.Meeting" Role="Meeting" Multiplicity="1" />
+          <End Type="VtcModel.MeetingParticipant" Role="MeetingParticipant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Meeting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingParticipant">
+              <PropertyRef Name="MeetingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MeetingParticipants_Person">
+          <End Type="VtcModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="VtcModel.MeetingParticipant" Role="MeetingParticipant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MeetingParticipant">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MeetingExternalLocations">
+          <End Type="VtcModel.ExternalLocation" Role="ExternalLocation" Multiplicity="*" />
+          <End Type="VtcModel.Meeting" Role="Meeting" Multiplicity="*" />
+        </Association>
+        <Association Name="MeetingRooms">
+          <End Type="VtcModel.Meeting" Role="Meeting" Multiplicity="*" />
+          <End Type="VtcModel.Room" Role="Room" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Person_Building">
+          <End Type="VtcModel.Building" Role="Building" Multiplicity="0..1" />
+          <End Type="VtcModel.Person" Role="Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="BuildingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_Location">
+          <End Type="VtcModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="VtcModel.Person" Role="Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="Ternary" a:ExternalTypeName="VtcIts.Ternary" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="ParticipantType" a:ExternalTypeName="VtcIts.ParticipantType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="MeetingRequestSource" a:ExternalTypeName="VtcIts.MeetingRequestSource" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="0" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="RuleText" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Meetings" Relationship="VtcModel.FK_Meeting_MeetingSeries" FromRole="MeetingSery" ToRole="Meeting" />
+        </EntityType>
+        <Association Name="FK_Meeting_MeetingSeries">
+          <End Type="VtcModel.Series" Role="MeetingSery" Multiplicity="0..1" />
+          <End Type="VtcModel.Meeting" Role="Meeting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MeetingSery">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting">
+              <PropertyRef Name="SeriesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="MeetingStatus" a:ExternalTypeName="VtcIts.MeetingStatus" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Boolean" Name="RegistrationAllowed" Nullable="false" />
+          <Property Type="Boolean" Name="EmailEnabled" Nullable="false" />
+          <Property Type="String" Name="SurveyLink" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SystemMailName" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SystemMailAddress" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <ComplexType Name="AvailableBuildings_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="LocationId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="AvailablePeople_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="BadgeNumber" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="LocationId" Nullable="false" />
+          <Property Type="Int32" Name="BuildingId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AvailableRooms_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="BuildingId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="VtcEnabled" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="AvailableExLocations_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="IpAddress" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PointOfContact" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TechnicalContactPhone" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="TechnicalContactEmail" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="AvailableBadgeNumbers_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="BadgeNumber" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="LocationId" Nullable="false" />
+          <Property Type="Int32" Name="BuildingId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="AvailableEmails_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="BadgeNumber" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="FirstName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="LocationId" Nullable="false" />
+          <Property Type="Int32" Name="BuildingId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetDetailedReport_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="Start" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="End" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Notes" Nullable="true" MaxLength="Max" />
+          <Property Type="Int32" Name="Source" Nullable="false" />
+          <Property Type="String" Name="FootprintsTicket" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RequesterId" Nullable="false" />
+          <Property Type="String" Name="RequesterBadgeNumber" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Requester" Nullable="false" MaxLength="102" />
+          <Property Type="String" Name="Technician" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Boolean" Name="SurveySent" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetSummaryReport_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="Start" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="End" Nullable="false" Precision="23" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Notes" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Source" Nullable="false" MaxLength="15" />
+          <Property Type="Int32" Name="Rooms" Nullable="true" />
+          <Property Type="Int32" Name="Participants" Nullable="true" />
+          <Property Type="Int32" Name="TravelAvoided_Yes" Nullable="true" />
+          <Property Type="Int32" Name="TravelAvoided_Maybe" Nullable="true" />
+          <Property Type="Int32" Name="ExternalLocations" Nullable="true" />
+          <Property Type="String" Name="Footprints" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RequesterBadgeNumber" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="Requester" Nullable="false" MaxLength="102" />
+          <Property Type="String" Name="Technician" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="SurveySent" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetSettings_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Boolean" Name="RegistrationAllowed" Nullable="false" />
+          <Property Type="Boolean" Name="EmailEnabled" Nullable="false" />
+          <Property Type="String" Name="SurveyLink" Nullable="false" MaxLength="Max" />
+          <Property Type="String" Name="SystemMailName" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="SystemMailAddress" Nullable="false" MaxLength="250" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VtcModelStoreContainer" CdmEntityContainer="VtcContext">
+          <EntitySetMapping Name="Buildings">
+            <EntityTypeMapping TypeName="VtcModel.Building">
+              <MappingFragment StoreEntitySet="Building">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExternalLocations">
+            <EntityTypeMapping TypeName="VtcModel.ExternalLocation">
+              <MappingFragment StoreEntitySet="ExternalLocation">
+                <ScalarProperty Name="TechnicalContactEmail" ColumnName="TechnicalContactEmail" />
+                <ScalarProperty Name="TechnicalContactPhone" ColumnName="TechnicalContactPhone" />
+                <ScalarProperty Name="PointOfContact" ColumnName="PointOfContact" />
+                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KemtahTeches">
+            <EntityTypeMapping TypeName="VtcModel.KemtahTech">
+              <MappingFragment StoreEntitySet="KemtahTech">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="KemtahId" ColumnName="KemtahId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="VtcModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Meetings">
+            <EntityTypeMapping TypeName="VtcModel.Meeting">
+              <MappingFragment StoreEntitySet="Meeting">
+                <ScalarProperty Name="UnknownParticipants_TravelNotAvoided" ColumnName="UnknownParticipants_TravelNotAvoided" />
+                <ScalarProperty Name="UnknownParticipants_TravelMaybeAvoided" ColumnName="UnknownParticipants_TravelMaybeAvoided" />
+                <ScalarProperty Name="UnknownParticipants_TravelAvoided" ColumnName="UnknownParticipants_TravelAvoided" />
+                <ScalarProperty Name="SurveySent" ColumnName="SurveySent" />
+                <ScalarProperty Name="Closed" ColumnName="Closed" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SeriesId" ColumnName="SeriesId" />
+                <ScalarProperty Name="RequesterId" ColumnName="RequesterId" />
+                <ScalarProperty Name="TechnicianId" ColumnName="TechnicianId" />
+                <ScalarProperty Name="FootprintsTicket" ColumnName="FootprintsTicket" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MeetingParticipants">
+            <EntityTypeMapping TypeName="VtcModel.MeetingParticipant">
+              <MappingFragment StoreEntitySet="MeetingParticipants">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="TravelAvoided" ColumnName="TravelAvoided" />
+                <ScalarProperty Name="Attended" ColumnName="Attended" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="MeetingId" ColumnName="MeetingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="VtcModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="BuildingId" ColumnName="BuildingId" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="BadgeNumber" ColumnName="BadgeNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="VtcModel.Room">
+              <MappingFragment StoreEntitySet="Room">
+                <ScalarProperty Name="VtcEnabled" ColumnName="VtcEnabled" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BuildingId" ColumnName="BuildingId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="MeetingExternalLocations" TypeName="VtcModel.MeetingExternalLocations" StoreEntitySet="MeetingExternalLocations">
+            <EndProperty Name="Meeting">
+              <ScalarProperty Name="Id" ColumnName="MeetingId" />
+            </EndProperty>
+            <EndProperty Name="ExternalLocation">
+              <ScalarProperty Name="Id" ColumnName="ExternalLocationId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="MeetingRooms" TypeName="VtcModel.MeetingRooms" StoreEntitySet="MeetingRooms">
+            <EndProperty Name="Room">
+              <ScalarProperty Name="Id" ColumnName="RoomId" />
+            </EndProperty>
+            <EndProperty Name="Meeting">
+              <ScalarProperty Name="Id" ColumnName="MeetingId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Series">
+            <EntityTypeMapping TypeName="VtcModel.Series">
+              <MappingFragment StoreEntitySet="MeetingSeries">
+                <ScalarProperty Name="RuleText" ColumnName="RuleText" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="VtcModel.Setting">
+              <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SystemMailAddress" ColumnName="SystemMailAddress" />
+                <ScalarProperty Name="SystemMailName" ColumnName="SystemMailName" />
+                <ScalarProperty Name="SurveyLink" ColumnName="SurveyLink" />
+                <ScalarProperty Name="EmailEnabled" ColumnName="EmailEnabled" />
+                <ScalarProperty Name="RegistrationAllowed" ColumnName="RegistrationAllowed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AvailableBuildings" FunctionName="VtcModel.Store.AvailableBuildings">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.AvailableBuildings_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AvailablePeople" FunctionName="VtcModel.Store.AvailablePeople">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.AvailablePeople_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BadgeNumber" ColumnName="BadgeNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="BuildingId" ColumnName="BuildingId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AvailableRooms" FunctionName="VtcModel.Store.AvailableRooms">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.AvailableRooms_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BuildingId" ColumnName="BuildingId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="VtcEnabled" ColumnName="VtcEnabled" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AvailableExLocations" FunctionName="VtcModel.Store.AvailableExLocations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.AvailableExLocations_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="PointOfContact" ColumnName="PointOfContact" />
+                <ScalarProperty Name="TechnicalContactPhone" ColumnName="TechnicalContactPhone" />
+                <ScalarProperty Name="TechnicalContactEmail" ColumnName="TechnicalContactEmail" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AvailableBadgeNumbers" FunctionName="VtcModel.Store.AvailableBadgeNumbers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.AvailableBadgeNumbers_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BadgeNumber" ColumnName="BadgeNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="BuildingId" ColumnName="BuildingId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AvailableEmails" FunctionName="VtcModel.Store.AvailableEmails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.AvailableEmails_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BadgeNumber" ColumnName="BadgeNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="BuildingId" ColumnName="BuildingId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDetailedReport" FunctionName="VtcModel.Store.GetDetailedReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.GetDetailedReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="FootprintsTicket" ColumnName="FootprintsTicket" />
+                <ScalarProperty Name="RequesterId" ColumnName="RequesterId" />
+                <ScalarProperty Name="RequesterBadgeNumber" ColumnName="RequesterBadgeNumber" />
+                <ScalarProperty Name="Requester" ColumnName="Requester" />
+                <ScalarProperty Name="Technician" ColumnName="Technician" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SurveySent" ColumnName="SurveySent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSummaryReport" FunctionName="VtcModel.Store.GetSummaryReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.GetSummaryReport_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Rooms" ColumnName="Rooms" />
+                <ScalarProperty Name="Participants" ColumnName="Participants" />
+                <ScalarProperty Name="TravelAvoided_Yes" ColumnName="TravelAvoided_Yes" />
+                <ScalarProperty Name="TravelAvoided_Maybe" ColumnName="TravelAvoided_Maybe" />
+                <ScalarProperty Name="ExternalLocations" ColumnName="ExternalLocations" />
+                <ScalarProperty Name="Footprints" ColumnName="Footprints" />
+                <ScalarProperty Name="RequesterBadgeNumber" ColumnName="RequesterBadgeNumber" />
+                <ScalarProperty Name="Requester" ColumnName="Requester" />
+                <ScalarProperty Name="Technician" ColumnName="Technician" />
+                <ScalarProperty Name="SurveySent" ColumnName="SurveySent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetSettings" FunctionName="VtcModel.Store.GetSettings">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VtcModel.GetSettings_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RegistrationAllowed" ColumnName="RegistrationAllowed" />
+                <ScalarProperty Name="EmailEnabled" ColumnName="EmailEnabled" />
+                <ScalarProperty Name="SurveyLink" ColumnName="SurveyLink" />
+                <ScalarProperty Name="SystemMailName" ColumnName="SystemMailName" />
+                <ScalarProperty Name="SystemMailAddress" ColumnName="SystemMailAddress" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

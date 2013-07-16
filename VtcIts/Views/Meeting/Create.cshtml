@@ -1,0 +1,600 @@
+﻿@model VtcIts.Models.Meeting
+
+
+@section scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/mousewheel")
+    @Scripts.Render("~/bundles/timespinner")
+    @Scripts.Render("~/bundles/rrule")
+
+    <script>
+        var now = new Date();
+        var today = new Date('@DateTime.Now.ToString("MM/dd/yyyy")');
+        var tomorrow = new Date('@DateTime.Now.AddDays(1).ToString("MM/dd/yyyy")');
+        var maxDate = new Date(2014, 12, 31);
+        var eventDay = new Date('@Model.Start.ToString("MM/dd/yyyy")');
+        var requesterSelected = false;
+
+        $(function() {
+
+            // Load data if that's what you're doin'
+            // -------------------------------------------------------------------
+            $.getJSON('/api/KemtahTech/', function(data) {
+                var options = $('#kemtahTechList');
+                options.empty();
+                $.each(data, function(index, item) {
+                    var name = item.FirstName + ' ' + item.LastName;
+                    options.append($('<option />').val(item.Id).text(name));
+                });
+                options.val(-1);
+            });
+
+            $.getJSON('/api/Location/', function(data) {
+                var options = $("#newRequesterLocationList");
+                options.empty();
+                $.each(data, function(index, item) {
+                    options.append($("<option />").val(item.Id).text(item.Name));
+                });
+                fillNewRequesterBuildingList();
+            });
+
+
+            // Validation
+            // --------------------------------------------------------------------
+            jQuery.validator.addMethod("requesterRequired", function(value, element) {
+                return requesterSelected;
+            }, "A Requester must be selected");
+
+            jQuery.validator.addMethod("startParsesToTime", function(value, element) {
+                var testTime = Globalize.parseDate(value);
+                return testTime != null;
+            }, "Start must be a valid time.");
+
+            jQuery.validator.addMethod("endParsesToTime", function(value, element) {
+                var testTime = Globalize.parseDate(value);
+                return testTime != null;
+            }, "End must be a valid time.");
+
+
+            $("#creationForm")
+                .removeAttr("novalidate")
+                .validate({
+                    errorLabelContainer: "#creationErrors",
+                    wrapper: "li",
+                    rules: {
+                        title: {
+                            required: true,
+                            maxlength: 50
+                        },
+                        meetingDate: { required: true, date: true },
+                        meetingEndTime: { required: true, endParsesToTime: true },
+                        meetingStartTime: { required: true, startParsesToTime: true },
+                        requesterDisplayValidationText: { requesterRequired: true },
+                        footprintsTicket: { maxlength: 50 }
+                    },
+                    messages: {
+                        meetingDate: "Date must be provided.",
+                        title: {
+                            required: "Title must be provided.",
+                            maxlength: "Title may not be more than 50 characters long."
+                        },
+                        footprintsTicket: {
+                            maxlength: "Footprints may not be more than 50 characters long."
+                        }
+                    },
+
+                    submitHandler: function(form) {
+                        updateDateTimeField('start');
+                        updateDateTimeField('end');
+                        form.submit();
+                    }
+                });
+
+
+            $('#newRequesterForm')
+                .removeAttr("novalidate")
+                .validate({
+                    errorLabelContainer: "#requesterErrors",
+                    wrapper: "li",
+                    rules: {
+                        badgeNumber: { rangelength: [6, 6], number: true },
+                        email: { required: true, email: true, maxlength: 50 },
+                        firstName: { required: true, maxlength: 50 },
+                        lastName: { required: true, maxlength: 50 },
+                        phoneNumber: { maxlength: 25 }
+                    },
+                    messages: {
+                        badgeNumber: "Badge # must be 6 digits long.",
+                        email: {
+                            required: "Email must be provided.",
+                            email: "Email must be a valid email address",
+                            maxlength: "Email may not be more than 50 characters long."
+                        },
+                        firstName: {
+                            required: "First Name must be provided",
+                            maxlength: "First Name may not be more than 50 characters long."
+                        },
+                        lastName: {
+                            required: "Last Name must be provided",
+                            maxlength: "Last Name may not be more than 50 characters long."
+                        },
+                        phoneNumber: {
+                            maxlength: "Phone may not be more than 25 characters long."
+                        }
+                    },
+                    submitHandler: function() {
+                        fillRequesterFields();
+                        $('#setRequester').dialog("close");
+                    }
+                });
+
+            // Time Spinners
+            // --------------------------------------------------------------------
+            setupTimeSpinner();
+
+            $('#meetingStartTime')
+                .timespinner({
+                    spin: function(event, ui) {
+                        var isValid = validateTimes(ui, 'start');
+                        if (isValid) {
+                            updateDateTimeField('start');
+                            updateDateTimeField('end');
+                        }
+                        return isValid;
+                    }
+                });
+
+
+            $('#meetingEndTime')
+                .timespinner({
+                    spin: function(event, ui) {
+                        var isValid = validateTimes(ui, 'end');
+                        if (isValid) {
+                            updateDateTimeField('start');
+                            updateDateTimeField('end');
+                        }
+                        return isValid;
+                    }
+                });
+            updateDateTimeField("start");
+            updateDateTimeField("end");
+
+            // Dialogs
+            // --------------------------------------------------------------------
+            $("#setRequester")
+                .dialog({
+                    autoOpen: false,
+                    modal: true,
+                    resizable: false,
+                    width: 650,
+                    buttons: {
+                        "Save": function() {
+                            $('#newRequesterForm').submit();
+                        },
+                        Cancel: function() {
+                            $(this).dialog("close");
+                        }
+                    },
+                    close: function() {
+                    }
+                });
+
+
+            // Date Pickers
+            // --------------------------------------------------------------------
+            $('#meetingDate')
+                .val((new Date()).toLocaleDateString())
+                .change(function() {
+                    updateDateTimeField('start');
+                    updateDateTimeField('end');
+                })
+                .datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: -0,
+                    maxDate: maxDate
+                });
+
+
+            // Change event handlers
+            // --------------------------------------------------------------------
+            $("#newRequesterLocationList")
+                .change(function() {
+                    fillNewRequesterBuildingList();
+                });
+
+
+            $(".selectRequesterMethod")
+                .change(function() {
+                    setEditRequesterToggle();
+                });
+
+
+            // Click event handlers
+            // --------------------------------------------------------------------
+            $("#setRequesterLink")
+                .click(function() {
+                    setEditRequesterToggle();
+                    $("#setRequester").dialog("open");
+                });
+
+
+            // Autocomplete
+            // --------------------------------------------------------------------
+            //$("#setRequesterEmailList")
+            //    .autocomplete({
+            //        source: '/api/Person/',
+            //        minLength: 2,
+            //        select: function(event, ui) {
+            //            fillRequesterDetails(ui.item);
+            //        }
+            //    })
+            //    .data("ui-autocomplete")._renderItem = function(ul, item) {
+            //        var name = item.LastName + ", " + item.FirstName;
+            //        var email = item.Email.toLowerCase();
+            //        var text = email + " (" + name + ")";
+            //        return $("<li>")
+            //            .append("<a>" + text + "</a>")
+            //            .appendTo(ul);
+            //    };
+            
+            //$("#setRequesterBadgeNumberList")
+            // .autocomplete({
+            //     source: '/api/Person/?$filter=BadgeNumber ne null',
+            //     minLength: 2,
+            //     select: function (event, ui) {
+            //         fillRequesterDetails(ui.item);
+            //     }
+            // })
+            // .data("ui-autocomplete")._renderItem = function (ul, item) {
+            //     var name = item.LastName + ", " + item.FirstName;
+            //     var text = item.BadgeNumber + " (" + name + ")";
+            //     return $("<li>")
+            //         .append("<a>" + text + "</a>")
+            //         .appendTo(ul);
+
+            // };
+
+            $("#setRequesterEmailList")
+                .autocomplete({
+                    source: function(request, response) {
+                        $.post('@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AvailableEmails"})',
+                            { id: -1, search: request.term, maxResults: 12 },
+                            'jsonp'
+                        )
+                        .success(function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.Email.toLowerCase() + " (" + item.LastName + ", " + item.FirstName + ")",
+                                    value: item
+                                };
+                            }));
+                        })
+                        .fail(function(data) { alert("Error in reaching web api."); });
+                    },
+                    minLength: 3,
+                    select: function(event, ui) {
+                        fillRequesterDetails(ui.item.value);
+                        $(this).val(''); return false;
+                    }
+                });
+
+            $("#setRequesterBadgeNumberList")
+                .autocomplete({
+                    source: function (request, response) {
+                        $.post('@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AvailableBadgeNumbers"})',
+                            { id: -1, search: request.term, maxResults: 12 },
+                            'jsonp'
+                        )
+                        .success(function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.BadgeNumber + " (" + item.LastName + ", " + item.FirstName + ")",
+                                    value: item
+                                };
+                            }));
+                        })
+                        .fail(function (data) { alert("Error in reaching web api."); });
+                    },
+                    minLength: 2,
+                    select: function (event, ui) {
+                        fillRequesterDetails(ui.item.value);
+                        $(this).val(''); return false;
+                    }
+            });
+
+        });
+
+
+        function enable(toToggle, enabled) {
+            var disabled = 'disabled';
+            var disabledColor = '#F3F3f3';
+            var enabledColor = '#FFFFFF';
+            var backgroundColor = 'background-color';
+
+            if (enabled) {
+                toToggle
+                    .css(backgroundColor, enabledColor)
+                    .removeAttr(disabled);
+            } else {
+                toToggle
+                    .attr(disabled, disabled)
+                    .css(backgroundColor, disabledColor);
+            }
+        }
+
+
+        /// -------------------------------------------------------------------
+        /// Combines the date and the appropriate time field into a single 
+        /// DateTime value
+        /// -------------------------------------------------------------------
+
+        function updateDateTimeField(fieldChanged) {
+            var date = Globalize.parseDate($('#meetingDate').val());
+            var time = Globalize.parseDate(
+                (fieldChanged == 'start')
+                    ? $('#meetingStartTime').val()
+                    : $('#meetingEndTime').val()
+            );
+
+            var output = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                time.getHours(),
+                time.getMinutes(),
+                0, 0
+            );
+            if (fieldChanged == 'start') {
+                $('#startDateTime').val(output.toISOString());
+            } else {
+                $('#endDateTime').val(output.toISOString());
+            }
+        }
+
+
+        /// -------------------------------------------------------------------
+        /// Ensures that the specified times are valid with respect to each
+        /// other.
+        /// -------------------------------------------------------------------
+
+        function validateTimes(ui, fieldChanged) {
+            return isValidTime(ui,
+                $('#meetingStartTime').val(),
+                $('#meetingEndTime').val(),
+                fieldChanged
+            );
+        }
+
+
+        function fillNewRequesterBuildingList() {
+            var currentLocation = $("#newRequesterLocationList").val();
+            var apiUrl = '/api/Building/?$filter=LocationId eq ' + currentLocation;
+            var options = $("#newRequesterBuildingList");
+            options.empty();
+            $.getJSON(apiUrl, function(data) {
+                $.each(data, function(index, item) {
+                    options.append($("<option />").val(item.Id).text(item.Name));
+                });
+                $("#newRequesterBuildingDiv").toggle($("#newRequesterBuildingList>option").size() > 0);
+            });
+        }
+
+
+        function fillRequesterDetails(person) {
+            $("#newRequesterId").val(person.Id);
+            $("#newRequesterEmail").val(person.Email);
+            $("#newRequesterBadgeNumber").val(person.BadgeNumber);
+            $("#newRequesterFirstName").val(person.FirstName);
+            $("#newRequesterLastName").val(person.LastName);
+            $("#newRequesterPhone").val(person.Phone);
+            $("#newRequesterLocationList").val(person.LocationId);
+
+            fillNewRequesterBuildingList();
+            if (person.BuildingId != null) {
+                $("#newRequesterBuildingList").val(person.BuildingId);
+            }
+        }
+
+
+        function fillRequesterFields() {
+            $("#requesterId").val($("#newRequesterId").val());
+            $("#requesterEmail").val($("#newRequesterEmail").val());
+            $("#requesterBadgeNumber").val($("#newRequesterBadgeNumber").val());
+            $("#requesterFirstName").val($("#newRequesterFirstName").val());
+            $("#requesterLastName").val($("#newRequesterLastName").val());
+            $("#requesterPhone").val($("#newRequesterPhone").val());
+            $("#requesterLocationId").val($("#newRequesterLocationList").val());
+            $("#requesterBuildingId").val($("#newRequesterBuildingList").val());
+            $("#requesterDisplay").text($("#requesterLastName").val() + ", " + $("#requesterFirstName").val());
+            requesterSelected = true;
+        }
+
+
+        function setEditRequesterToggle() {
+            var method = $('input.selectRequesterMethod:checked').val();
+            var emailList = $("#setRequesterEmailList");
+            var badgeList = $("#setRequesterBadgeNumberList");
+            var newFields = $(".newRequesterField");
+            newFields.val('');
+            $("#newRequesterLocationList").prop('selectedIndex', 0);
+            fillNewRequesterBuildingList();
+
+            enable(emailList, method == "email");
+            enable(badgeList, method == "badgeNumber");
+            enable(newFields, method == "new");
+        }
+
+    </script>
+}
+
+
+    @{
+        ViewBag.Title = "Create";
+    }
+
+    <style>
+        input.timeSpinner {
+            text-align: center;
+            width: 75px;
+        }
+
+        input.details, textarea.details {
+            width: 365px;
+        }
+
+    </style>
+
+
+    <h2>Create</h2>
+
+    @using (Html.BeginForm("Create", "Meeting",
+                           FormMethod.Post,
+                           new {id = "creationForm"}
+        )) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Meeting</legend>
+            <div class='editor-label'>
+                <label for='title'>Title</label>
+            </div>
+            <div class='editor-field'>
+                <input type='text' id='title' name='title' class='details'  maxlength="50" />
+            </div>
+
+            <div class='editor-label'>
+                <label for="meetingDate">When</label>
+                <label for="meetingStartTime" style="display: none;">Start Time</label>
+                <label for="meetingEndTime" style="display: none;">End Time</label>
+            </div>
+            <div class='editor-field' style='vertical-align: central;'>
+                <input id='meetingDate' style='text-align: center; width: 85px;' value='@DateTime.Now.ToString("MM/dd/yyyy")' name='meetingDate' /> 
+                <input id='meetingStartTime' value='@Model.Start.ToString("hh:mm tt")' class='timeSpinner' name='meetingStartTime' /> to 
+                <input id='meetingEndTime' value='@Model.End.ToString("hh:mm tt")' class='timeSpinner' name='meetingEndTime' /> CST
+                <input type='hidden' id='startDateTime' name='startDateTime' />
+                <input type='hidden' id='endDateTime' name='endDateTime' />
+            </div>
+        
+            <div class='editor-label'>
+                <label for='requesterDisplayValidationText'>Requester</label>
+            </div>
+            <div class='editor-field' style="margin-top: 5px; margin-bottom: 5px;">
+                <input type="hidden" id="requesterSelected" />
+                <input type="hidden" id="requesterId" name="requesterID" />
+                <input type="hidden" id="requesterEmail" name="email" />
+                <input type="hidden" id="requesterBadgeNumber" name="badgeNumber" />
+                <input type="hidden" id="requesterFirstName" name="firstName" />
+                <input type="hidden" id="requesterLastName" name="lastName" />
+                <input type="hidden" id="requesterPhone" name="phoneNumber" />
+                <input type="hidden" id="requesterLocationId" name="locationId" />
+                <input type="hidden" id="requesterBuildingId" name="buildingId" />
+                <div style="width:100%;">
+                    <div id="requesterDisplay" style="float:left;"></div>
+                    <a id="setRequesterLink" class="buttonLink">
+                        <img class="buttonLink" src="/Images/icons/Edit/Edit_16x16.png" alt="Set Requester" />Set Meeting Requester
+                    </a>
+                    <input id="requesterDisplayValidationText" name="requesterDisplayValidationText" style="float: left; height:0px; visibility: hidden;width: 0px;"/>
+                </div>
+            </div>
+            <div class='editor-label' style="margin-top: 5px; clear: both;">
+                <label for='description'>Description</label>
+            </div>
+            <div class='editor-field'>
+                <textarea id='description' name="description" rows='4' class='details'></textarea>
+            </div>
+            <div class='editor-label'>
+                <label for='kemtahTechList'>Request Source</label>
+            </div>
+            <div class='editor-field'>
+                <select name="source">
+                    <option value="0" selected="selected">Exchange</option>
+                    <option value="1">Phone</option>
+                    <option value="2">Email</option>
+                </select>
+            </div>
+            <div class='editor-label'>
+                <label for='footprintsTicket'>Footprints Ticket(s)</label>
+            </div>
+            <div class='editor-field'>
+                <input type='text' id='footprintsTicket' name='footprintsTicket' class='details' maxlength="50" />
+            </div>
+            
+            <div class='editor-label'>
+                <label for='kemtahTechList'>Kemtah Technician</label>
+            </div>
+            <div class='editor-field'>
+                <select id='kemtahTechList' name='techId'></select>
+            </div>
+            <p>
+                <input type="submit" value="Create" /> | @Html.ActionLink("Back to List", "Index", "Home")
+            </p>
+            <div id="creationErrors"></div> 
+        </fieldset>
+    }
+
+
+<div id="setRequester" title="Edit Requester">
+    <form id="newRequesterForm">
+    <fieldset>
+        <legend>Edit the Meeting Requester</legend>
+        <div style="float: left;">
+            <input type="radio" class="selectRequesterMethod" name="method" value="email" checked="checked" >Find by Email:<br/>
+            <input id="setRequesterEmailList" name="emailInput" />
+            <br/>
+
+            <input type="radio" class="selectRequesterMethod" name="method" value="badgeNumber">Find by Badge #:<br/>
+            <input type="text" id="setRequesterBadgeNumberList" name="badgeNumberInput" />
+            <br/>
+
+            <input type="radio" class="selectRequesterMethod" name="method" value="new">New Person:
+        </div>
+        <div style="float: left;">
+            <input type="hidden" id="newRequesterId" name="personId"/>
+
+            <div class="editor-label"><label for="email">Email</label></div>
+            <div class="editor-field">
+                <input type="text" id="newRequesterEmail" class="newRequesterField" name="email" maxlength="50" >
+            </div>
+
+            <div class="editor-label"><label for="badgeNumber">Badge #</label></div>
+            <div class="editor-field">
+                <input type="text" id="newRequesterBadgeNumber" class="newRequesterField" name="badgeNumber" maxlength="6" >
+            </div>
+
+            <div class="editor-label"><label for="firstName">First Name</label></div>
+            <div class="editor-field">
+                <input type="text" id="newRequesterFirstName" class="newRequesterField" name="firstName" maxlength="50" >
+            </div>
+
+            <div class="editor-label"><label for="lastName">Last Name</label></div>
+            <div class="editor-field">
+                <input type="text" id="newRequesterLastName" class="newRequesterField" name="lastName" maxlength="50" >
+            </div>
+
+            <div class="editor-label"><label for="phoneNumber">Phone</label></div>
+            <div class="editor-field">
+                <input type="text" id="newRequesterPhone" class="newRequesterField" name="phoneNumber" maxlength="25" >
+            </div>
+
+            <div class="editor-label"><label for="locationId">Location</label></div>
+            <div class="editor-field">
+                <select id="newRequesterLocationList" name="locationId" class="newRequesterField"></select>
+            </div>
+
+            <div id="newRequesterBuildingDiv">
+                <div class="editor-label"><label for="buildingId">Building</label></div>
+                <div class="editor-field">
+                    <select id="newRequesterBuildingList" name="buildingId" class="newRequesterField"></select>
+                </div>
+            </div>
+            <div id="requesterErrors"></div>
+        </div>
+    </fieldset>
+    </form>
+
+</div>
+ 

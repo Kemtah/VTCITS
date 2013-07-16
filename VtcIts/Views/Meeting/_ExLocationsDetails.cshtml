@@ -1,0 +1,32 @@
+﻿@model VtcIts.Models.Meeting
+
+<h3>External Locations</h3> 
+ 
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>IP</th>
+            <th>POC</th>
+            <th>Tech Phone</th>
+            <th>Tech Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ExternalLocations) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.IpAddress)</td>
+                <td>@Html.DisplayFor(modelItem => item.PointOfContact)</td>
+                <td>
+                    <a href="tel:@item.TechnicalContactPhone">@Html.DisplayFor(modelItem => item.TechnicalContactPhone)</a>
+                </td>
+                <td>
+                    <a href="mailto:@item.TechnicalContactEmail">@Html.DisplayFor(modelItem => item.TechnicalContactEmail)</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+   

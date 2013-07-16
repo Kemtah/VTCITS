@@ -1,0 +1,60 @@
+﻿@model IEnumerable<VtcIts.Models.Meeting>
+
+@{
+    ViewBag.Title = "Meetings";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqgrid")
+    @Styles.Render("~/Content/themes/base/css")
+    @Styles.Render("~/Content/jqgrid/css")
+
+    <script type="text/javascript">       
+
+        $(document).ready(function() {
+            var url = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})';
+
+            $("#listTable").jqGrid({
+                url: url,
+                colNames: ['Id', 'Date', 'Time', 'Title', 'Requester', 'Status'],
+                colModel: [
+                    { name: 'Id', index: 'Id', hidden: true, sorttype: 'int' },
+                    {
+                        name: 'DateText', index: 'DateText', sorttype: 'date',
+                        formatter: function (cellvalue, options, rowObject) {
+                            return '<a href="' + '@Url.Action("Details", "Meeting")' + '/' + rowObject.Id + '">' + rowObject.DateText + '</a>';
+                        }
+                    },{
+                        name: 'DurationText', index: 'DurationText', sorttype: 'date',
+                        formatter: function (cellvalue, options, rowObject) {
+                            return '<a href="' + '@Url.Action("Details", "Meeting")' + '/' + rowObject.Id + '">' + rowObject.DurationText + '</a>';
+                        }
+                    },{
+                        name: 'Title', index: 'Title', 
+                        formatter: function (cellvalue, options, rowObject) {
+                            return '<a href="' + '@Url.Action("Details", "Meeting")' + '/' + rowObject.Id + '">' + rowObject.Title + '</a>';
+                      }
+                    },{
+                        name: 'RequesterName', index: 'RequesterName'
+                    },
+                    {
+                        name: 'StatusText', index: 'StatusText'
+                    }
+                ],
+                jsonReader: { root: '' },
+                pager: '#listPager',
+                sortname: 'Start'
+            });
+        });
+
+    </script>
+}
+
+<table id="listTable"></table>
+<div id="listPager"></div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="29862a3dcb9b4334948f39c6acccef4f" Name="Diagram1" ZoomLevel="59">
+        <EntityTypeShape EntityType="VtcModel.Building" Width="1.5" PointX="3.25" PointY="15" />
+        <EntityTypeShape EntityType="VtcModel.ExternalLocation" Width="1.5" PointX="8.25" PointY="15" />
+        <EntityTypeShape EntityType="VtcModel.KemtahTech" Width="1.5" PointX="9.75" PointY="18.75" />
+        <EntityTypeShape EntityType="VtcModel.Location" Width="1.5" PointX="1" PointY="15" />
+        <EntityTypeShape EntityType="VtcModel.Meeting" Width="1.5" PointX="6.25" PointY="18.875" />
+        <EntityTypeShape EntityType="VtcModel.MeetingParticipant" Width="1.5" PointX="3.5" PointY="18.875" />
+        <EntityTypeShape EntityType="VtcModel.Person" Width="1.5" PointX="0.875" PointY="18.875" />
+        <EntityTypeShape EntityType="VtcModel.Room" Width="1.5" PointX="5.5" PointY="15" />
+        <AssociationConnector Association="VtcModel.FK_Building_Location" />
+        <AssociationConnector Association="VtcModel.FK_Room_Building" />
+        <AssociationConnector Association="VtcModel.FK_Meeting_KemtahTech" />
+        <AssociationConnector Association="VtcModel.FK_Meeting_Person" />
+        <AssociationConnector Association="VtcModel.FK_MeetingParticipants_Meeting" />
+        <AssociationConnector Association="VtcModel.FK_MeetingParticipants_Person" />
+        <AssociationConnector Association="VtcModel.MeetingExternalLocations" />
+        <AssociationConnector Association="VtcModel.MeetingRooms" />
+        <AssociationConnector Association="VtcModel.FK_Person_Building" />
+        <AssociationConnector Association="VtcModel.FK_Person_Location" />
+        <EntityTypeShape EntityType="VtcModel.Series" Width="1.5" PointX="9.875" PointY="21.875" />
+        <AssociationConnector Association="VtcModel.FK_Meeting_MeetingSeries" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

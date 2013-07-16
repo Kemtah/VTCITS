@@ -1,0 +1,14 @@
+﻿.ui-jqgrid tr.jqgrow td
+{
+    white-space: pre-wrap !important;
+    text-wrap: normal !important;
+    -ms-word-wrap: normal !important;
+    word-wrap: normal !important;
+}
+
+.ui-jqgrid .ui-pg-input {
+    font-size:1em !important;
+    margin: 0 !important;
+    padding: 3px !important;
+    width: 20px !important;
+}

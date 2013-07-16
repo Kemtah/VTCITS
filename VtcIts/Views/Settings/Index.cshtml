@@ -1,0 +1,57 @@
+﻿@model IEnumerable<VtcIts.Models.Setting>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RegistrationAllowed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailEnabled)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SurveyLink)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SystemMailName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SystemMailAddress)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RegistrationAllowed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailEnabled)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SurveyLink)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SystemMailName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SystemMailAddress)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

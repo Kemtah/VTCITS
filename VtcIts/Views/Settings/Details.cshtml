@@ -1,0 +1,50 @@
+﻿@model VtcIts.Models.Setting
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Setting</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.RegistrationAllowed)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RegistrationAllowed)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.EmailEnabled)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EmailEnabled)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SurveyLink)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SurveyLink)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SystemMailName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SystemMailName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SystemMailAddress)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SystemMailAddress)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

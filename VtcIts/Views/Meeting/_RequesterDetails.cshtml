@@ -1,0 +1,41 @@
+﻿@model VtcIts.Models.Meeting
+
+<h3>Requester</h3>
+<fieldset>
+    <legend>Requester</legend> 
+<div style="float: left;">
+    <div class="display-label" style="clear:both; padding-bottom: 10px;">
+        <label for="readRequesterName">Name</label> 
+    </div>
+    <div class="display-label" style="clear:both;">
+        <label for="readRequesterBadgeNumber">Badge #</label> 
+    </div>
+</div>
+<div style="float: left; padding-left: 10px;">
+    <div id="readRequesterName" class="display-field" style="clear:both; padding-bottom: 10px;">
+        @string.Format("{0}, {1}",
+                Model.Requester.LastName,
+                Model.Requester.FirstName
+        )
+    </div>
+    <div id="readRequesterBadgeNumber" class="display-field" style="clear:both;">
+        @Model.Requester.BadgeNumber
+    </div> 
+</div>
+<div style="float: left; padding-left: 10px;">
+    <div class="display-label" style="clear:both; padding-bottom: 10px;">
+        <label for="readRequesterEmail">Email</label> 
+    </div>
+    <div class="display-label" style="clear:both;">
+        <label for="readRequesterPhone">Phone</label> 
+    </div>
+</div>
+<div style="float: left; padding-left: 10px;">
+    <div id="readRequesterEmail" class="display-field" style="clear:both; padding-bottom: 10px;">
+        <a href="mailto:@Model.Requester.Email">@Model.Requester.Email</a>
+    </div>
+    <div id="readRequesterPhone" class="display-field" style="clear:both;">
+        <a href="tel:@Model.Requester.Phone">@Model.Requester.Phone</a>
+    </div> 
+</div>
+</fieldset>

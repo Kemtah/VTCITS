@@ -1,0 +1,6 @@
+﻿Dear ANL Video Conference participant,<br/>
+ <br/>
+You are receiving this email as one who recently participated in a Video Conference Event <b>[ID]</b>. We hope you had a rewarding experience during your video collaboration.   Please take a minute to fill out a short <a href="[LINK]">Video Conference Survey</a> that lets us know how we are doing.  We appreciate your time and look forward to supporting you in the future.<br/>
+<br/>
+Thank You,<br/>
+VTC Support Team 

@@ -1,0 +1,1084 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D59683AD-F244-4F55-8941-35658D3EBD3D}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VtcIts</RootNamespace>
+    <AssemblyName>VtcIts</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.3.0.13117\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.0.13117\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.3.0.13117\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.3.0.13117\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.3.0.13117\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.0.13117\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.5.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.5.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Services" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Spatial, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.5.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.OData, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.4.0.1\lib\net40\System.Web.Http.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel">
+      <HintPath>..\packages\Thinktecture.IdentityModel.2.6.2\lib\net45\Thinktecture.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.20710.0\lib\net40\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.20710.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.20710.0\lib\net40\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CorsConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\AvailableEmailsController.cs" />
+    <Compile Include="Controllers\Api\AvailableBadgeNumbersController.cs" />
+    <Compile Include="Controllers\Api\EventController.cs" />
+    <Compile Include="Controllers\Api\ExternalLocationController.cs" />
+    <Compile Include="Controllers\Api\KemtahTechController.cs" />
+    <Compile Include="Controllers\Api\LocationController.cs" />
+    <Compile Include="Controllers\Api\BuildingController.cs" />
+    <Compile Include="Controllers\Api\MeetingController.cs" />
+    <Compile Include="Controllers\Api\SeriesController.cs" />
+    <Compile Include="Controllers\Api\PersonController.cs" />
+    <Compile Include="Controllers\Api\RoomController.cs" />
+    <Compile Include="Controllers\BuildingController.cs" />
+    <Compile Include="Controllers\ExternalLocationController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KemtahTechController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\MeetingController.cs" />
+    <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\SeriesController.cs" />
+    <Compile Include="ConversionHelper.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HtmlHelperExtensions.cs" />
+    <Compile Include="Mail.cs" />
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Api\Building.cs" />
+    <Compile Include="Models\Api\MeetingSeries.cs" />
+    <Compile Include="Models\Api\Event.cs" />
+    <Compile Include="Models\Api\Person.cs" />
+    <Compile Include="Models\Api\ExternalLocation.cs" />
+    <Compile Include="Models\Api\KemtahTech.cs" />
+    <Compile Include="Models\Api\Location.cs" />
+    <Compile Include="Models\Api\Meeting.cs" />
+    <Compile Include="Models\Api\Participant.cs" />
+    <Compile Include="Models\Api\Room.cs" />
+    <Compile Include="Models\AvailableBadgeNumbers_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AvailableBuildings_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AvailableEmails_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AvailableExLocations_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AvailablePeople_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AvailableRooms_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Building.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\ExternalLocation.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetDetailedReport_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSettings_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetSummaryReport_Result.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KemtahTech.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Location.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Meeting.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MeetingExtensions.cs" />
+    <Compile Include="Models\MeetingParticipant.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Person.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Room.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Series.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Setting.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VtcModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VtcModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VtcModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VtcModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VtcModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequiredIfAttribute.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\fullcalendar.css" />
+    <Content Include="Content\fullcalendar.print.css" />
+    <Content Include="Content\jqGrid.Custom.css" />
+    <Content Include="Content\jquery.jqGrid\ellipsis-xbl.xml" />
+    <Content Include="Content\jquery.jqGrid\ui.jqgrid.css" />
+    <Content Include="Content\themes\base\images\animated-overlay.gif" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\animated-overlay.gif" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="camera.ico" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <EntityDeploy Include="Models\VtcModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>VtcModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\frankenlogo.png" />
+    <Content Include="Images\icons\Add\Add.ico" />
+    <Content Include="Images\icons\Add\Add_16x16.png" />
+    <Content Include="Images\icons\Add\Add_24x24.png" />
+    <Content Include="Images\icons\Add\Add_256x256.png" />
+    <Content Include="Images\icons\Add\Add_32x32.png" />
+    <Content Include="Images\icons\Add\Add_48x48.png" />
+    <Content Include="Images\icons\Archive\Archive.ico" />
+    <Content Include="Images\icons\Archive\Archive_16x16.png" />
+    <Content Include="Images\icons\Archive\Archive_24x24.png" />
+    <Content Include="Images\icons\Archive\Archive_256x256.png" />
+    <Content Include="Images\icons\Archive\Archive_32x32.png" />
+    <Content Include="Images\icons\Archive\Archive_48x48.png" />
+    <Content Include="Images\icons\Audio Disk\Audio Disk.ico" />
+    <Content Include="Images\icons\Audio Disk\Audio Disk_16x16.png" />
+    <Content Include="Images\icons\Audio Disk\Audio Disk_24x24.png" />
+    <Content Include="Images\icons\Audio Disk\Audio Disk_256x256.png" />
+    <Content Include="Images\icons\Audio Disk\Audio Disk_32x32.png" />
+    <Content Include="Images\icons\Audio Disk\Audio Disk_48x48.png" />
+    <Content Include="Images\icons\Burn Disk\Burn Disk.ico" />
+    <Content Include="Images\icons\Burn Disk\Burn Disk_16x16.png" />
+    <Content Include="Images\icons\Burn Disk\Burn Disk_24x24.png" />
+    <Content Include="Images\icons\Burn Disk\Burn Disk_256x256.png" />
+    <Content Include="Images\icons\Burn Disk\Burn Disk_32x32.png" />
+    <Content Include="Images\icons\Burn Disk\Burn Disk_48x48.png" />
+    <Content Include="Images\icons\Calendar\Calendar.ico" />
+    <Content Include="Images\icons\Calendar\Calendar_16x16.png" />
+    <Content Include="Images\icons\Calendar\Calendar_24x24.png" />
+    <Content Include="Images\icons\Calendar\Calendar_256x256.png" />
+    <Content Include="Images\icons\Calendar\Calendar_32x32.png" />
+    <Content Include="Images\icons\Calendar\Calendar_48x48.png" />
+    <Content Include="Images\icons\Cancel\Cancel.ico" />
+    <Content Include="Images\icons\Cancel\Cancel_16x16.png" />
+    <Content Include="Images\icons\Cancel\Cancel_24x24.png" />
+    <Content Include="Images\icons\Cancel\Cancel_256x256.png" />
+    <Content Include="Images\icons\Cancel\Cancel_32x32.png" />
+    <Content Include="Images\icons\Cancel\Cancel_48x48.png" />
+    <Content Include="Images\icons\Check\Check.ico" />
+    <Content Include="Images\icons\Check\Check_16x16.png" />
+    <Content Include="Images\icons\Check\Check_24x24.png" />
+    <Content Include="Images\icons\Check\Check_256x256.png" />
+    <Content Include="Images\icons\Check\Check_32x32.png" />
+    <Content Include="Images\icons\Check\Check_48x48.png" />
+    <Content Include="Images\icons\Compact Disk\Compact Disk.ico" />
+    <Content Include="Images\icons\Compact Disk\Compact Disk_16x16.png" />
+    <Content Include="Images\icons\Compact Disk\Compact Disk_24x24.png" />
+    <Content Include="Images\icons\Compact Disk\Compact Disk_256x256.png" />
+    <Content Include="Images\icons\Compact Disk\Compact Disk_32x32.png" />
+    <Content Include="Images\icons\Compact Disk\Compact Disk_48x48.png" />
+    <Content Include="Images\icons\Copy v2\Copy v2.ico" />
+    <Content Include="Images\icons\Copy v2\Copy v2_16x16.png" />
+    <Content Include="Images\icons\Copy v2\Copy v2_24x24.png" />
+    <Content Include="Images\icons\Copy v2\Copy v2_256x256.png" />
+    <Content Include="Images\icons\Copy v2\Copy v2_32x32.png" />
+    <Content Include="Images\icons\Copy v2\Copy v2_48x48.png" />
+    <Content Include="Images\icons\Copy\Copy.ico" />
+    <Content Include="Images\icons\Copy\Copy_16x16.png" />
+    <Content Include="Images\icons\Copy\Copy_24x24.png" />
+    <Content Include="Images\icons\Copy\Copy_256x256.png" />
+    <Content Include="Images\icons\Copy\Copy_32x32.png" />
+    <Content Include="Images\icons\Copy\Copy_48x48.png" />
+    <Content Include="Images\icons\Cut\Cut.ico" />
+    <Content Include="Images\icons\Cut\Cut_16x16.png" />
+    <Content Include="Images\icons\Cut\Cut_24x24.png" />
+    <Content Include="Images\icons\Cut\Cut_256x256.png" />
+    <Content Include="Images\icons\Cut\Cut_32x32.png" />
+    <Content Include="Images\icons\Cut\Cut_48x48.png" />
+    <Content Include="Images\icons\Delete\Delete.ico" />
+    <Content Include="Images\icons\Delete\Delete_16x16.png" />
+    <Content Include="Images\icons\Delete\Delete_24x24.png" />
+    <Content Include="Images\icons\Delete\Delete_256x256.png" />
+    <Content Include="Images\icons\Delete\Delete_32x32.png" />
+    <Content Include="Images\icons\Delete\Delete_48x48.png" />
+    <Content Include="Images\icons\Download\Download.ico" />
+    <Content Include="Images\icons\Download\Download_16x16.png" />
+    <Content Include="Images\icons\Download\Download_24x24.png" />
+    <Content Include="Images\icons\Download\Download_256x256.png" />
+    <Content Include="Images\icons\Download\Download_32x32.png" />
+    <Content Include="Images\icons\Download\Download_48x48.png" />
+    <Content Include="Images\icons\DVD Disk\DVD Disk.ico" />
+    <Content Include="Images\icons\DVD Disk\DVD Disk_16x16.png" />
+    <Content Include="Images\icons\DVD Disk\DVD Disk_24x24.png" />
+    <Content Include="Images\icons\DVD Disk\DVD Disk_256x256.png" />
+    <Content Include="Images\icons\DVD Disk\DVD Disk_32x32.png" />
+    <Content Include="Images\icons\DVD Disk\DVD Disk_48x48.png" />
+    <Content Include="Images\icons\Edit\Edit.ico" />
+    <Content Include="Images\icons\Edit\Edit_16x16.png" />
+    <Content Include="Images\icons\Edit\Edit_24x24.png" />
+    <Content Include="Images\icons\Edit\Edit_256x256.png" />
+    <Content Include="Images\icons\Edit\Edit_32x32.png" />
+    <Content Include="Images\icons\Edit\Edit_48x48.png" />
+    <Content Include="Images\icons\Favorites\Favorites.ico" />
+    <Content Include="Images\icons\Favorites\Favorites_16x16.png" />
+    <Content Include="Images\icons\Favorites\Favorites_24x24.png" />
+    <Content Include="Images\icons\Favorites\Favorites_256x256.png" />
+    <Content Include="Images\icons\Favorites\Favorites_32x32.png" />
+    <Content Include="Images\icons\Favorites\Favorites_48x48.png" />
+    <Content Include="Images\icons\Find\Find.ico" />
+    <Content Include="Images\icons\Find\Find_16x16.png" />
+    <Content Include="Images\icons\Find\Find_24x24.png" />
+    <Content Include="Images\icons\Find\Find_256x256.png" />
+    <Content Include="Images\icons\Find\Find_32x32.png" />
+    <Content Include="Images\icons\Find\Find_48x48.png" />
+    <Content Include="Images\icons\Flash Disk\Flash Disk.ico" />
+    <Content Include="Images\icons\Flash Disk\Flash Disk_16x16.png" />
+    <Content Include="Images\icons\Flash Disk\Flash Disk_24x24.png" />
+    <Content Include="Images\icons\Flash Disk\Flash Disk_256x256.png" />
+    <Content Include="Images\icons\Flash Disk\Flash Disk_32x32.png" />
+    <Content Include="Images\icons\Flash Disk\Flash Disk_48x48.png" />
+    <Content Include="Images\icons\Folder\Folder.ico" />
+    <Content Include="Images\icons\Folder\Folder_16x16.png" />
+    <Content Include="Images\icons\Folder\Folder_24x24.png" />
+    <Content Include="Images\icons\Folder\Folder_256x256.png" />
+    <Content Include="Images\icons\Folder\Folder_32x32.png" />
+    <Content Include="Images\icons\Folder\Folder_48x48.png" />
+    <Content Include="Images\icons\Forward\Forward.ico" />
+    <Content Include="Images\icons\Forward\Forward_16x16.png" />
+    <Content Include="Images\icons\Forward\Forward_24x24.png" />
+    <Content Include="Images\icons\Forward\Forward_256x256.png" />
+    <Content Include="Images\icons\Forward\Forward_32x32.png" />
+    <Content Include="Images\icons\Forward\Forward_48x48.png" />
+    <Content Include="Images\icons\Globe\Globe.ico" />
+    <Content Include="Images\icons\Globe\Globe_16x16.png" />
+    <Content Include="Images\icons\Globe\Globe_24x24.png" />
+    <Content Include="Images\icons\Globe\Globe_256x256.png" />
+    <Content Include="Images\icons\Globe\Globe_32x32.png" />
+    <Content Include="Images\icons\Globe\Globe_48x48.png" />
+    <Content Include="Images\icons\Hard Disk\Hard Disk.ico" />
+    <Content Include="Images\icons\Hard Disk\Hard Disk_16x16.png" />
+    <Content Include="Images\icons\Hard Disk\Hard Disk_24x24.png" />
+    <Content Include="Images\icons\Hard Disk\Hard Disk_256x256.png" />
+    <Content Include="Images\icons\Hard Disk\Hard Disk_32x32.png" />
+    <Content Include="Images\icons\Hard Disk\Hard Disk_48x48.png" />
+    <Content Include="Images\icons\Help\Help.ico" />
+    <Content Include="Images\icons\Help\Help_16x16.png" />
+    <Content Include="Images\icons\Help\Help_24x24.png" />
+    <Content Include="Images\icons\Help\Help_256x256.png" />
+    <Content Include="Images\icons\Help\Help_32x32.png" />
+    <Content Include="Images\icons\Help\Help_48x48.png" />
+    <Content Include="Images\icons\Information\Information.ico" />
+    <Content Include="Images\icons\Information\Information_16x16.png" />
+    <Content Include="Images\icons\Information\Information_24x24.png" />
+    <Content Include="Images\icons\Information\Information_256x256.png" />
+    <Content Include="Images\icons\Information\Information_32x32.png" />
+    <Content Include="Images\icons\Information\Information_48x48.png" />
+    <Content Include="Images\icons\Key\Key.ico" />
+    <Content Include="Images\icons\Key\Key_16x16.png" />
+    <Content Include="Images\icons\Key\Key_24x24.png" />
+    <Content Include="Images\icons\Key\Key_256x256.png" />
+    <Content Include="Images\icons\Key\Key_32x32.png" />
+    <Content Include="Images\icons\Key\Key_48x48.png" />
+    <Content Include="Images\icons\Log Out\Log Out.ico" />
+    <Content Include="Images\icons\Log Out\Log Out_16x16.png" />
+    <Content Include="Images\icons\Log Out\Log Out_24x24.png" />
+    <Content Include="Images\icons\Log Out\Log Out_256x256.png" />
+    <Content Include="Images\icons\Log Out\Log Out_32x32.png" />
+    <Content Include="Images\icons\Log Out\Log Out_48x48.png" />
+    <Content Include="Images\icons\Mail\Mail.ico" />
+    <Content Include="Images\icons\Mail\Mail_16x16.png" />
+    <Content Include="Images\icons\Mail\Mail_24x24.png" />
+    <Content Include="Images\icons\Mail\Mail_256x256.png" />
+    <Content Include="Images\icons\Mail\Mail_32x32.png" />
+    <Content Include="Images\icons\Mail\Mail_48x48.png" />
+    <Content Include="Images\icons\Negative\Negative.ico" />
+    <Content Include="Images\icons\Negative\Negative_16x16.png" />
+    <Content Include="Images\icons\Negative\Negative_24x24.png" />
+    <Content Include="Images\icons\Negative\Negative_256x256.png" />
+    <Content Include="Images\icons\Negative\Negative_32x32.png" />
+    <Content Include="Images\icons\Negative\Negative_48x48.png" />
+    <Content Include="Images\icons\New\New.ico" />
+    <Content Include="Images\icons\New\New_16x16.png" />
+    <Content Include="Images\icons\New\New_24x24.png" />
+    <Content Include="Images\icons\New\New_256x256.png" />
+    <Content Include="Images\icons\New\New_32x32.png" />
+    <Content Include="Images\icons\New\New_48x48.png" />
+    <Content Include="Images\icons\Next\Next.ico" />
+    <Content Include="Images\icons\Next\Next_16x16.png" />
+    <Content Include="Images\icons\Next\Next_24x24.png" />
+    <Content Include="Images\icons\Next\Next_256x256.png" />
+    <Content Include="Images\icons\Next\Next_32x32.png" />
+    <Content Include="Images\icons\Next\Next_48x48.png" />
+    <Content Include="Images\icons\Open\Open.ico" />
+    <Content Include="Images\icons\Open\Open_16x16.png" />
+    <Content Include="Images\icons\Open\Open_24x24.png" />
+    <Content Include="Images\icons\Open\Open_256x256.png" />
+    <Content Include="Images\icons\Open\Open_32x32.png" />
+    <Content Include="Images\icons\Open\Open_48x48.png" />
+    <Content Include="Images\icons\Paste\Paste.ico" />
+    <Content Include="Images\icons\Paste\Paste_16x16.png" />
+    <Content Include="Images\icons\Paste\Paste_24x24.png" />
+    <Content Include="Images\icons\Paste\Paste_256x256.png" />
+    <Content Include="Images\icons\Paste\Paste_32x32.png" />
+    <Content Include="Images\icons\Paste\Paste_48x48.png" />
+    <Content Include="Images\icons\Pause\Pause.ico" />
+    <Content Include="Images\icons\Pause\Pause_16x16.png" />
+    <Content Include="Images\icons\Pause\Pause_24x24.png" />
+    <Content Include="Images\icons\Pause\Pause_256x256.png" />
+    <Content Include="Images\icons\Pause\Pause_32x32.png" />
+    <Content Include="Images\icons\Pause\Pause_48x48.png" />
+    <Content Include="Images\icons\Picture\Picture.ico" />
+    <Content Include="Images\icons\Picture\Picture_16x16.png" />
+    <Content Include="Images\icons\Picture\Picture_24x24.png" />
+    <Content Include="Images\icons\Picture\Picture_256x256.png" />
+    <Content Include="Images\icons\Picture\Picture_32x32.png" />
+    <Content Include="Images\icons\Picture\Picture_48x48.png" />
+    <Content Include="Images\icons\Play\Play.ico" />
+    <Content Include="Images\icons\Play\Play_16x16.png" />
+    <Content Include="Images\icons\Play\Play_24x24.png" />
+    <Content Include="Images\icons\Play\Play_256x256.png" />
+    <Content Include="Images\icons\Play\Play_32x32.png" />
+    <Content Include="Images\icons\Play\Play_48x48.png" />
+    <Content Include="Images\icons\Positive\Positive.ico" />
+    <Content Include="Images\icons\Positive\Positive_16x16.png" />
+    <Content Include="Images\icons\Positive\Positive_24x24.png" />
+    <Content Include="Images\icons\Positive\Positive_256x256.png" />
+    <Content Include="Images\icons\Positive\Positive_32x32.png" />
+    <Content Include="Images\icons\Positive\Positive_48x48.png" />
+    <Content Include="Images\icons\Presentation\Presentation.ico" />
+    <Content Include="Images\icons\Presentation\Presentation_16x16.png" />
+    <Content Include="Images\icons\Presentation\Presentation_24x24.png" />
+    <Content Include="Images\icons\Presentation\Presentation_256x256.png" />
+    <Content Include="Images\icons\Presentation\Presentation_32x32.png" />
+    <Content Include="Images\icons\Presentation\Presentation_48x48.png" />
+    <Content Include="Images\icons\Preview\Preview.ico" />
+    <Content Include="Images\icons\Preview\Preview_16x16.png" />
+    <Content Include="Images\icons\Preview\Preview_24x24.png" />
+    <Content Include="Images\icons\Preview\Preview_256x256.png" />
+    <Content Include="Images\icons\Preview\Preview_32x32.png" />
+    <Content Include="Images\icons\Preview\Preview_48x48.png" />
+    <Content Include="Images\icons\Previous\Previous.ico" />
+    <Content Include="Images\icons\Previous\Previous_16x16.png" />
+    <Content Include="Images\icons\Previous\Previous_24x24.png" />
+    <Content Include="Images\icons\Previous\Previous_256x256.png" />
+    <Content Include="Images\icons\Previous\Previous_32x32.png" />
+    <Content Include="Images\icons\Previous\Previous_48x48.png" />
+    <Content Include="Images\icons\Print\Print.ico" />
+    <Content Include="Images\icons\Print\Print_16x16.png" />
+    <Content Include="Images\icons\Print\Print_24x24.png" />
+    <Content Include="Images\icons\Print\Print_256x256.png" />
+    <Content Include="Images\icons\Print\Print_32x32.png" />
+    <Content Include="Images\icons\Print\Print_48x48.png" />
+    <Content Include="Images\icons\Properties\Properties.ico" />
+    <Content Include="Images\icons\Properties\Properties_16x16.png" />
+    <Content Include="Images\icons\Properties\Properties_24x24.png" />
+    <Content Include="Images\icons\Properties\Properties_256x256.png" />
+    <Content Include="Images\icons\Properties\Properties_32x32.png" />
+    <Content Include="Images\icons\Properties\Properties_48x48.png" />
+    <Content Include="Images\icons\Redo\Redo.ico" />
+    <Content Include="Images\icons\Redo\Redo_16x16.png" />
+    <Content Include="Images\icons\Redo\Redo_24x24.png" />
+    <Content Include="Images\icons\Redo\Redo_256x256.png" />
+    <Content Include="Images\icons\Redo\Redo_32x32.png" />
+    <Content Include="Images\icons\Redo\Redo_48x48.png" />
+    <Content Include="Images\icons\Refresh\Refresh.ico" />
+    <Content Include="Images\icons\Refresh\Refresh_16x16.png" />
+    <Content Include="Images\icons\Refresh\Refresh_24x24.png" />
+    <Content Include="Images\icons\Refresh\Refresh_256x256.png" />
+    <Content Include="Images\icons\Refresh\Refresh_32x32.png" />
+    <Content Include="Images\icons\Refresh\Refresh_48x48.png" />
+    <Content Include="Images\icons\Remove\Remove.ico" />
+    <Content Include="Images\icons\Remove\Remove_16x16.png" />
+    <Content Include="Images\icons\Remove\Remove_24x24.png" />
+    <Content Include="Images\icons\Remove\Remove_256x256.png" />
+    <Content Include="Images\icons\Remove\Remove_32x32.png" />
+    <Content Include="Images\icons\Remove\Remove_48x48.png" />
+    <Content Include="Images\icons\Rename\Rename.ico" />
+    <Content Include="Images\icons\Rename\Rename_16x16.png" />
+    <Content Include="Images\icons\Rename\Rename_24x24.png" />
+    <Content Include="Images\icons\Rename\Rename_256x256.png" />
+    <Content Include="Images\icons\Rename\Rename_32x32.png" />
+    <Content Include="Images\icons\Rename\Rename_48x48.png" />
+    <Content Include="Images\icons\Save\Save.ico" />
+    <Content Include="Images\icons\Save\Save_16x16.png" />
+    <Content Include="Images\icons\Save\Save_24x24.png" />
+    <Content Include="Images\icons\Save\Save_256x256.png" />
+    <Content Include="Images\icons\Save\Save_32x32.png" />
+    <Content Include="Images\icons\Save\Save_48x48.png" />
+    <Content Include="Images\icons\Search\Search.ico" />
+    <Content Include="Images\icons\Search\Search_16x16.png" />
+    <Content Include="Images\icons\Search\Search_24x24.png" />
+    <Content Include="Images\icons\Search\Search_256x256.png" />
+    <Content Include="Images\icons\Search\Search_32x32.png" />
+    <Content Include="Images\icons\Search\Search_48x48.png" />
+    <Content Include="Images\icons\Send\Send.ico" />
+    <Content Include="Images\icons\Send\Send_16x16.png" />
+    <Content Include="Images\icons\Send\Send_24x24.png" />
+    <Content Include="Images\icons\Send\Send_256x256.png" />
+    <Content Include="Images\icons\Send\Send_32x32.png" />
+    <Content Include="Images\icons\Send\Send_48x48.png" />
+    <Content Include="Images\icons\Settings\Settings.ico" />
+    <Content Include="Images\icons\Settings\Settings_16x16.png" />
+    <Content Include="Images\icons\Settings\Settings_24x24.png" />
+    <Content Include="Images\icons\Settings\Settings_256x256.png" />
+    <Content Include="Images\icons\Settings\Settings_32x32.png" />
+    <Content Include="Images\icons\Settings\Settings_48x48.png" />
+    <Content Include="Images\icons\Stock Index Down\Stock Index Down.ico" />
+    <Content Include="Images\icons\Stock Index Down\Stock Index Down_16x16.png" />
+    <Content Include="Images\icons\Stock Index Down\Stock Index Down_24x24.png" />
+    <Content Include="Images\icons\Stock Index Down\Stock Index Down_256x256.png" />
+    <Content Include="Images\icons\Stock Index Down\Stock Index Down_32x32.png" />
+    <Content Include="Images\icons\Stock Index Down\Stock Index Down_48x48.png" />
+    <Content Include="Images\icons\Stock Index Up\Stock Index Up.ico" />
+    <Content Include="Images\icons\Stock Index Up\Stock Index Up_16x16.png" />
+    <Content Include="Images\icons\Stock Index Up\Stock Index Up_24x24.png" />
+    <Content Include="Images\icons\Stock Index Up\Stock Index Up_256x256.png" />
+    <Content Include="Images\icons\Stock Index Up\Stock Index Up_32x32.png" />
+    <Content Include="Images\icons\Stock Index Up\Stock Index Up_48x48.png" />
+    <Content Include="Images\icons\Stop\Stop.ico" />
+    <Content Include="Images\icons\Stop\Stop_16x16.png" />
+    <Content Include="Images\icons\Stop\Stop_24x24.png" />
+    <Content Include="Images\icons\Stop\Stop_256x256.png" />
+    <Content Include="Images\icons\Stop\Stop_32x32.png" />
+    <Content Include="Images\icons\Stop\Stop_48x48.png" />
+    <Content Include="Images\icons\Synchronize\Synchronize.ico" />
+    <Content Include="Images\icons\Synchronize\Synchronize_16x16.png" />
+    <Content Include="Images\icons\Synchronize\Synchronize_24x24.png" />
+    <Content Include="Images\icons\Synchronize\Synchronize_256x256.png" />
+    <Content Include="Images\icons\Synchronize\Synchronize_32x32.png" />
+    <Content Include="Images\icons\Synchronize\Synchronize_48x48.png" />
+    <Content Include="Images\icons\Text Document\Text Document.ico" />
+    <Content Include="Images\icons\Text Document\Text Document_16x16.png" />
+    <Content Include="Images\icons\Text Document\Text Document_24x24.png" />
+    <Content Include="Images\icons\Text Document\Text Document_256x256.png" />
+    <Content Include="Images\icons\Text Document\Text Document_32x32.png" />
+    <Content Include="Images\icons\Text Document\Text Document_48x48.png" />
+    <Content Include="Images\icons\to_customize_desktop_icons.txt" />
+    <Content Include="Images\icons\Undo\Undo.ico" />
+    <Content Include="Images\icons\Undo\Undo_16x16.png" />
+    <Content Include="Images\icons\Undo\Undo_24x24.png" />
+    <Content Include="Images\icons\Undo\Undo_256x256.png" />
+    <Content Include="Images\icons\Undo\Undo_32x32.png" />
+    <Content Include="Images\icons\Undo\Undo_48x48.png" />
+    <Content Include="Images\icons\Upload\Upload.ico" />
+    <Content Include="Images\icons\Upload\Upload_16x16.png" />
+    <Content Include="Images\icons\Upload\Upload_24x24.png" />
+    <Content Include="Images\icons\Upload\Upload_256x256.png" />
+    <Content Include="Images\icons\Upload\Upload_32x32.png" />
+    <Content Include="Images\icons\Upload\Upload_48x48.png" />
+    <Content Include="Images\icons\User\User.ico" />
+    <Content Include="Images\icons\User\User_16x16.png" />
+    <Content Include="Images\icons\User\User_24x24.png" />
+    <Content Include="Images\icons\User\User_256x256.png" />
+    <Content Include="Images\icons\User\User_32x32.png" />
+    <Content Include="Images\icons\User\User_48x48.png" />
+    <Content Include="Images\icons\Zoom In\Zoom In.ico" />
+    <Content Include="Images\icons\Zoom In\Zoom In_16x16.png" />
+    <Content Include="Images\icons\Zoom In\Zoom In_24x24.png" />
+    <Content Include="Images\icons\Zoom In\Zoom In_256x256.png" />
+    <Content Include="Images\icons\Zoom In\Zoom In_32x32.png" />
+    <Content Include="Images\icons\Zoom In\Zoom In_48x48.png" />
+    <Content Include="Images\icons\Zoom Out\Zoom Out.ico" />
+    <Content Include="Images\icons\Zoom Out\Zoom Out_16x16.png" />
+    <Content Include="Images\icons\Zoom Out\Zoom Out_24x24.png" />
+    <Content Include="Images\icons\Zoom Out\Zoom Out_256x256.png" />
+    <Content Include="Images\icons\Zoom Out\Zoom Out_32x32.png" />
+    <Content Include="Images\icons\Zoom Out\Zoom Out_48x48.png" />
+    <Content Include="Models\VtcModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>VtcModel.edmx</DependentUpon>
+      <LastGenOutput>VtcModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\VtcModel.edmx.diagram">
+      <DependentUpon>VtcModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\VtcModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>VtcModel.edmx</DependentUpon>
+      <LastGenOutput>VtcModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Scripts\fullcalendar.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
+    <Content Include="Scripts\gcal.js" />
+    <Content Include="Scripts\i18n\grid.locale-ar.js" />
+    <Content Include="Scripts\i18n\grid.locale-bg.js" />
+    <Content Include="Scripts\i18n\grid.locale-bg1251.js" />
+    <Content Include="Scripts\i18n\grid.locale-cat.js" />
+    <Content Include="Scripts\i18n\grid.locale-cn.js" />
+    <Content Include="Scripts\i18n\grid.locale-cs.js" />
+    <Content Include="Scripts\i18n\grid.locale-da.js" />
+    <Content Include="Scripts\i18n\grid.locale-de.js" />
+    <Content Include="Scripts\i18n\grid.locale-dk.js" />
+    <Content Include="Scripts\i18n\grid.locale-el.js" />
+    <Content Include="Scripts\i18n\grid.locale-en.js" />
+    <Content Include="Scripts\i18n\grid.locale-es.js" />
+    <Content Include="Scripts\i18n\grid.locale-fa.js" />
+    <Content Include="Scripts\i18n\grid.locale-fi.js" />
+    <Content Include="Scripts\i18n\grid.locale-fr.js" />
+    <Content Include="Scripts\i18n\grid.locale-gl.js" />
+    <Content Include="Scripts\i18n\grid.locale-he.js" />
+    <Content Include="Scripts\i18n\grid.locale-hr.js" />
+    <Content Include="Scripts\i18n\grid.locale-hr1250.js" />
+    <Content Include="Scripts\i18n\grid.locale-hu.js" />
+    <Content Include="Scripts\i18n\grid.locale-id.js" />
+    <Content Include="Scripts\i18n\grid.locale-is.js" />
+    <Content Include="Scripts\i18n\grid.locale-it.js" />
+    <Content Include="Scripts\i18n\grid.locale-ja.js" />
+    <Content Include="Scripts\i18n\grid.locale-kr.js" />
+    <Content Include="Scripts\i18n\grid.locale-lt.js" />
+    <Content Include="Scripts\i18n\grid.locale-mne.js" />
+    <Content Include="Scripts\i18n\grid.locale-nl.js" />
+    <Content Include="Scripts\i18n\grid.locale-no.js" />
+    <Content Include="Scripts\i18n\grid.locale-pl.js" />
+    <Content Include="Scripts\i18n\grid.locale-pt-br.js" />
+    <Content Include="Scripts\i18n\grid.locale-pt.js" />
+    <Content Include="Scripts\i18n\grid.locale-ro.js" />
+    <Content Include="Scripts\i18n\grid.locale-ru.js" />
+    <Content Include="Scripts\i18n\grid.locale-sk.js" />
+    <Content Include="Scripts\i18n\grid.locale-sr-latin.js" />
+    <Content Include="Scripts\i18n\grid.locale-sr.js" />
+    <Content Include="Scripts\i18n\grid.locale-sv.js" />
+    <Content Include="Scripts\i18n\grid.locale-th.js" />
+    <Content Include="Scripts\i18n\grid.locale-tr.js" />
+    <Content Include="Scripts\i18n\grid.locale-tw.js" />
+    <Content Include="Scripts\i18n\grid.locale-ua.js" />
+    <Content Include="Scripts\i18n\grid.locale-vi.js" />
+    <Content Include="Images\icons\.DS_Store" />
+    <Content Include="Images\icons\Add\Thumbs.db" />
+    <Content Include="Images\icons\Archive\Thumbs.db" />
+    <Content Include="Images\icons\Audio Disk\Thumbs.db" />
+    <Content Include="Images\icons\Burn Disk\Thumbs.db" />
+    <Content Include="Images\icons\Calendar\Thumbs.db" />
+    <Content Include="Images\icons\Cancel\Thumbs.db" />
+    <Content Include="Images\icons\Check\Thumbs.db" />
+    <Content Include="Images\icons\Compact Disk\Thumbs.db" />
+    <Content Include="Images\icons\Copy v2\Thumbs.db" />
+    <Content Include="Images\icons\Copy\Thumbs.db" />
+    <Content Include="Images\icons\Cut\.DS_Store" />
+    <Content Include="Images\icons\Cut\Thumbs.db" />
+    <Content Include="Images\icons\Delete\Thumbs.db" />
+    <Content Include="Images\icons\Download\Thumbs.db" />
+    <Content Include="Images\icons\DVD Disk\Thumbs.db" />
+    <Content Include="Images\icons\Edit\Thumbs.db" />
+    <Content Include="Images\icons\Favorites\Thumbs.db" />
+    <Content Include="Images\icons\Find\Thumbs.db" />
+    <Content Include="Images\icons\Flash Disk\Thumbs.db" />
+    <Content Include="Images\icons\Folder\Thumbs.db" />
+    <Content Include="Images\icons\Forward\Thumbs.db" />
+    <Content Include="Images\icons\Globe\Thumbs.db" />
+    <Content Include="Images\icons\Hard Disk\Thumbs.db" />
+    <Content Include="Images\icons\Help\Thumbs.db" />
+    <Content Include="Images\icons\Information\Thumbs.db" />
+    <Content Include="Images\icons\Key\Thumbs.db" />
+    <Content Include="Images\icons\Log Out\Thumbs.db" />
+    <Content Include="Images\icons\Mail\Thumbs.db" />
+    <Content Include="Images\icons\Negative\Thumbs.db" />
+    <Content Include="Images\icons\New\Thumbs.db" />
+    <Content Include="Images\icons\Next\Thumbs.db" />
+    <Content Include="Images\icons\Open\Thumbs.db" />
+    <Content Include="Images\icons\Paste\Thumbs.db" />
+    <Content Include="Images\icons\Pause\Thumbs.db" />
+    <Content Include="Images\icons\Picture\Thumbs.db" />
+    <Content Include="Images\icons\Play\Thumbs.db" />
+    <Content Include="Images\icons\Positive\Thumbs.db" />
+    <Content Include="Images\icons\Presentation\Thumbs.db" />
+    <Content Include="Images\icons\Preview\Thumbs.db" />
+    <Content Include="Images\icons\Previous\.DS_Store" />
+    <Content Include="Images\icons\Previous\Thumbs.db" />
+    <Content Include="Images\icons\Print\Thumbs.db" />
+    <Content Include="Images\icons\Properties\Thumbs.db" />
+    <Content Include="Images\icons\Redo\Thumbs.db" />
+    <Content Include="Images\icons\Refresh\Thumbs.db" />
+    <Content Include="Images\icons\Remove\Thumbs.db" />
+    <Content Include="Images\icons\Rename\Thumbs.db" />
+    <Content Include="Images\icons\Save\Thumbs.db" />
+    <Content Include="Images\icons\Search\Thumbs.db" />
+    <Content Include="Images\icons\Send\Thumbs.db" />
+    <Content Include="Images\icons\Settings\Thumbs.db" />
+    <Content Include="Images\icons\Stock Index Down\Thumbs.db" />
+    <Content Include="Images\icons\Stock Index Up\Thumbs.db" />
+    <Content Include="Images\icons\Stop\Thumbs.db" />
+    <Content Include="Images\icons\Synchronize\Thumbs.db" />
+    <Content Include="Images\icons\Text Document\Thumbs.db" />
+    <Content Include="Images\icons\Undo\Thumbs.db" />
+    <Content Include="Images\icons\Upload\Thumbs.db" />
+    <Content Include="Images\icons\User\Thumbs.db" />
+    <Content Include="Images\icons\Zoom In\Thumbs.db" />
+    <Content Include="Images\icons\Zoom Out\Thumbs.db" />
+    <Content Include="Content\Templates\SurveyEmail.txt" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\jquery.jqGrid.defaults.js" />
+    <Content Include="Scripts\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\jquery.jqGrid.src.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.2.1.debug.js" />
+    <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\rrule\nlp.js" />
+    <Content Include="Scripts\rrule\rrule.js" />
+    <Content Include="Scripts\rrule\underscore-min.js" />
+    <Content Include="Scripts\rrule\underscore.js" />
+    <Content Include="Scripts\ui.timespinner.js" />
+    <Content Include="TempLayoutPage.html" />
+    <Content Include="test.html" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Images\accent.png" />
+    <Content Include="Images\bullet.png" />
+    <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\orderedList0.png" />
+    <Content Include="Images\orderedList1.png" />
+    <Content Include="Images\orderedList2.png" />
+    <Content Include="Images\orderedList3.png" />
+    <Content Include="Images\orderedList4.png" />
+    <Content Include="Images\orderedList5.png" />
+    <Content Include="Images\orderedList6.png" />
+    <Content Include="Images\orderedList7.png" />
+    <Content Include="Images\orderedList8.png" />
+    <Content Include="Images\orderedList9.png" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Building\Index.cshtml" />
+    <Content Include="Views\Building\Details.cshtml" />
+    <Content Include="Views\Building\Create.cshtml" />
+    <Content Include="Views\Building\Edit.cshtml" />
+    <Content Include="Views\Building\Delete.cshtml" />
+    <Content Include="Views\Location\Index.cshtml" />
+    <Content Include="Views\Location\Details.cshtml" />
+    <Content Include="Views\Location\Create.cshtml" />
+    <Content Include="Views\Location\Edit.cshtml" />
+    <Content Include="Views\Location\Delete.cshtml" />
+    <Content Include="Views\ExternalLocation\Index.cshtml" />
+    <Content Include="Views\ExternalLocation\Details.cshtml" />
+    <Content Include="Views\ExternalLocation\Create.cshtml" />
+    <Content Include="Views\ExternalLocation\Edit.cshtml" />
+    <Content Include="Views\ExternalLocation\Delete.cshtml" />
+    <Content Include="Views\Person\Index.cshtml" />
+    <Content Include="Views\Person\Details.cshtml" />
+    <Content Include="Views\Person\Create.cshtml" />
+    <Content Include="Views\Person\Edit.cshtml" />
+    <Content Include="Views\Person\Delete.cshtml" />
+    <Content Include="Views\Room\Index.cshtml" />
+    <Content Include="Views\Room\Details.cshtml" />
+    <Content Include="Views\Room\Create.cshtml" />
+    <Content Include="Views\Room\Edit.cshtml" />
+    <Content Include="Views\Room\Delete.cshtml" />
+    <Content Include="Views\KemtahTech\Index.cshtml" />
+    <Content Include="Views\KemtahTech\Details.cshtml" />
+    <Content Include="Views\KemtahTech\Create.cshtml" />
+    <Content Include="Views\KemtahTech\Edit.cshtml" />
+    <Content Include="Views\KemtahTech\Delete.cshtml" />
+    <Content Include="Views\Meeting\Index.cshtml" />
+    <Content Include="Views\Meeting\Details.cshtml" />
+    <Content Include="Views\Meeting\Create.cshtml" />
+    <Content Include="Views\Meeting\Edit.cshtml" />
+    <Content Include="Views\Meeting\Delete.cshtml" />
+    <Content Include="Views\Meeting\_RoomsEdit.cshtml" />
+    <Content Include="Views\Meeting\_RoomsDetails.cshtml" />
+    <Content Include="Views\Meeting\_ExLocationsEdit.cshtml" />
+    <Content Include="Views\Meeting\_ParticipantsEdit.cshtml" />
+    <Content Include="Views\Meeting\_RequesterEdit.cshtml" />
+    <Content Include="Views\Meeting\_DetailsEdit.cshtml" />
+    <Content Include="Views\Home\Models.cshtml" />
+    <Content Include="Views\Series\Index.cshtml" />
+    <Content Include="Views\Series\Details.cshtml" />
+    <Content Include="Views\Series\Create.cshtml" />
+    <Content Include="Views\Series\Edit.cshtml" />
+    <Content Include="Views\Series\Delete.cshtml" />
+    <Content Include="Views\Meeting\_DetailsDetails.cshtml" />
+    <Content Include="Views\Meeting\_RequesterDetails.cshtml" />
+    <Content Include="Views\Meeting\_ParticipantsDetails.cshtml" />
+    <Content Include="Views\Meeting\_ExLocationsDetails.cshtml" />
+    <Content Include="Views\Meeting\_WorkflowEdit.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\Settings\Details.cshtml" />
+    <Content Include="Views\Settings\Create.cshtml" />
+    <Content Include="Views\Settings\Edit.cshtml" />
+    <Content Include="Views\Settings\Delete.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Emails\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50428/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

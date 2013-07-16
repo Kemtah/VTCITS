@@ -1,0 +1,217 @@
+﻿@model VtcIts.Models.Meeting
+
+<script>
+	// ------------------------------------------------------------------------
+	// For calling in $()
+	// ------------------------------------------------------------------------
+	function initialize_ExLocations() {
+		var meetingId = "@Model.Id";
+
+		$('.deleteExLocationLink')
+			.click(function () {
+				$(this).closest('form').submit();
+			});
+
+		$("#addMeetingExLocation").dialog({
+			autoOpen: false,
+			modal: true,
+			resizable: false,
+			width: 400,
+			buttons: {
+				"Add": function () {
+					$("#addMeetingExLocationForm").submit();
+				},
+				Cancel: function () {
+					$(this).dialog("close");
+				}
+			},
+			close: function () {
+			}
+		});
+
+
+		$('#addMeetingExLocationForm')
+		.removeAttr("novalidate")
+		.validate({
+			errorLabelContainer: "#locationErrors",
+			wrapper: "li",
+			rules: {
+				name: { required: true, maxlength: 50 },
+				ipAddress: { maxlength: 50 },
+				pointOfContact: { maxlength: 50 },
+				technicalContactEmail : { email: true, maxlength: 50 },
+				technicalContactPhone: { maxlength: 25 }
+			},
+			messages: {
+				name: {
+					required: "Name must be provided",
+					maxlength: "Name may not be more than 50 characters long."
+				},
+				ipAddress: {
+					maxlength: "IP Address may not be more than 50 characters long."
+				},
+				technicalContactEmail: {
+					email: "Technical Contact Email must be a valid email address",
+					maxlength: "Technical Contact Email may not be more than 50 characters long."
+				},
+				technicalContactPhone: {
+					maxlength: "Technical Contact Phone may not be more than 25 characters long."
+				}
+			},
+			submitHandler: function (form) {
+				form.submit();
+			}
+		});
+
+		$("#addMeetingExLocationLink")
+			.click(function () {
+				setAddExLocationToggle();
+				$("#addMeetingExLocation").dialog("open");
+			});
+
+		$(".addExLocationMethod")
+			.change(function () {
+				setAddExLocationToggle();
+			});
+
+		fillExLocationList(meetingId);
+	}
+
+
+
+	function setAddExLocationToggle() {
+		var method = $('input.addExLocationMethod:checked').val();
+		var disabled = 'disabled';
+		var existingList = $("#newMeeting_ExLocationist");
+		var newFields = $(".newExLocationField");
+
+		if (method == "existing") {
+			existingList.removeAttr(disabled);
+			newFields
+				.attr(disabled, disabled)
+				.css('background-color', '#F3F3f3')
+				.val('');
+		} else {
+			existingList.attr(disabled, disabled);
+			newFields
+				.css('background-color', '#FFFFFF')
+				.removeAttr(disabled);
+		}
+	}
+
+	// ------------------------------------------------------------------------
+	// Populates the building list with viable External Locations for this meeting
+	// ------------------------------------------------------------------------
+	function fillExLocationList(meetingId) {
+	    var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})' + '/AvailableExLocations';
+		var options = $('#newMeeting_ExLocationist');
+		options.empty();
+		$.getJSON(apiUrl, function (data) {
+			$.each(data, function (index, item) {
+				options.append($("<option />").val(item.Id).text(item.Name));
+			});
+		});
+	}
+
+</script>
+
+
+<h3>External Locations</h3> 
+ 
+<table width="100%">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>IP</th>
+			<th>POC</th>
+			<th>Tech Phone</th>
+			<th>Tech Email</th>
+			<th> </th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.ExternalLocations) {
+			<tr>
+				<td>@Html.DisplayFor(modelItem => item.Name)</td>
+				<td>@Html.DisplayFor(modelItem => item.IpAddress)</td>
+				<td>@Html.DisplayFor(modelItem => item.PointOfContact)</td>
+				<td>
+					<a href="tel:@item.TechnicalContactPhone">@Html.DisplayFor(modelItem => item.TechnicalContactPhone)</a>
+				</td>
+				<td>
+					<a href="mailto:@item.TechnicalContactEmail">@Html.DisplayFor(modelItem => item.TechnicalContactEmail)</a>
+				</td>
+				<td>
+					@using (Html.BeginForm(
+						"DeleteLocation","Meeting", 
+						new { meetingId=Model.Id, exLocationId=item.Id },
+						FormMethod.Post
+					)) {
+						@Html.AntiForgeryToken()
+						<a class="buttonLink deleteExLocationLink" title="Remove @(item.Name) from the meeting">
+							<img class="buttonLink" src="/Images/icons/Delete/Delete_16x16.png" alt="Delete"/>
+						</a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot id="addMeetingExLocationFooter">
+		<tr>
+			<td colspan="6">
+				<a id="addMeetingExLocationLink" class="buttonLink" title="Add an External Location">
+					<img class="buttonLink" src="/Images/icons/Add/Add_16x16.png" alt="Add" />Add
+				</a>
+			</td>
+		</tr> 
+	</tfoot>
+</table>
+
+<div id="addMeetingExLocation" title="Add Meeting ExLocation">
+	@using (Html.BeginForm("AddExLocation", "Meeting", 
+		method: FormMethod.Post,
+		routeValues: new { meetingId = Model.Id },
+		htmlAttributes: new {id="addMeetingExLocationForm"}
+	)) {
+		@Html.AntiForgeryToken()
+
+		<fieldset>
+			<legend>Add ExLocation to Meeting</legend>
+			<input type="radio" class="addExLocationMethod" name="addExLocationMethod" value="existing" checked="checked" >
+			<select id="newMeeting_ExLocationist" name="exLocationId"></select>
+			<br/>
+			<input type="radio" class="addExLocationMethod" name="addExLocationMethod" value="new">New:<br/>
+			<div>
+				<div class="editor-label"><label for="name">Name</label></div>
+				<div class="editor-field">
+					<input type="text" class="newExLocationField"  name="name" maxlength="50">
+				</div>
+			</div>
+			<div>
+				<div class="editor-label"><label for="ipAddress">IP Address</label></div>
+				<div class="editor-field">
+					<input type="text" class="newExLocationField" name="ipAddress" maxlength="50">
+				</div>
+			</div>
+			<div>
+				<div class="editor-label"><label for="pointOfContact">Point of Contact</label></div>
+				<div class="editor-field">
+					<input type="text" class="newExLocationField" name="pointOfContact" maxlength="50">
+				</div>
+			</div>
+			<div>
+				<div class="editor-label"><label for="technicalContactPhone">Technical Contact Phone</label></div>
+				<div class="editor-field">
+					<input type="text" class="newExLocationField" name="technicalContactPhone" maxlength="50">
+				</div>
+			</div>
+			<div>
+				<div class="editor-label"><label for="technicalContactEmail">Technical Contact Email</label></div>
+				<div class="editor-field">
+					<input type="text" class="newExLocationField" name="technicalContactEmail" maxlength="50">
+				</div>
+			</div>
+			<div id="locationErrors"></div>
+		</fieldset>
+	}
+</div>

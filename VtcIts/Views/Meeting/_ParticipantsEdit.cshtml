@@ -1,0 +1,415 @@
+﻿@model VtcIts.Models.Meeting
+
+<script>
+
+	// ------------------------------------------------------------------------
+	// For calling in $()
+	// ------------------------------------------------------------------------
+	function initialize_Participants() {
+	    var locationUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Location"})';
+
+	    $.getJSON(locationUrl, function (data) {
+	        var options = $("#newParticipantLocationList");
+	        options.empty();
+	        $.each(data, function (index, item) {
+	            options.append($("<option />").val(item.Id).text(item.Name));
+	        });
+	        fillNewParticipantBuildingList();
+	    });
+
+
+	    $('.removeParticipantLink')
+	        .click(function () {
+	            $(this).closest('form').submit();
+	        });
+		
+
+	    $('.participantInfoControl')
+	        .change(function () {
+	            $(this).closest('form').submit();
+	        });
+
+	    $('.participantAttendanceCheckbox')
+	        .change(function () {
+	            //UGH :(
+	            var hiddenfield = $(this).parent().children("input#attendanceHidden");
+	            hiddenfield.val($(this).prop('checked'));
+	            $(this).closest('form').submit();
+	        });
+
+	    $('.unknownParticipantCount')
+	        .change(function () {
+	            $(this).closest('form').submit();
+	        } );
+
+
+	    $("#newParticipantLocationList")
+	        .change(function () {
+	            fillNewParticipantBuildingList();
+	        });
+
+
+	    $("#addMeetingParticipant")
+	        .dialog({
+	            autoOpen: false,
+	            modal: true,
+	            resizable: false,
+	            width: 650,
+	            buttons: {
+	                "Add": function () {
+	                    $("#addMeetingParticipantForm").submit();
+	                },
+	                Cancel: function () {
+	                    $(this).dialog("close");
+	                }
+	            },
+	            close: function () { }
+	        });
+
+
+	    $('#addMeetingParticipantForm')
+	        .removeAttr("novalidate")
+	        .validate({
+	            errorLabelContainer: "#personErrors",
+	            wrapper: "li",
+	            rules: {
+	                badgeNumber: { rangelength: [5, 6], number: true },
+	                email: { required: true, email: true, maxlength: 50 },
+	                firstName: { required: true, maxlength: 50 },
+	                lastName: { required: true, maxlength: 50 },
+	                phoneNumber: { maxlength: 25 }
+	            },
+	            messages: {
+	                badgeNumber: "Badge # must be 6 digits long.",
+	                email: {
+	                    required: "Email must be provided.",
+	                    email: "Email must be a valid email address",
+	                    maxlength: "Email may not be more than 50 characters long."
+	                },
+	                firstName: {
+	                    required: "First Name must be provided",
+	                    maxlength: "First Name may not be more than 50 characters long."
+	                },
+	                lastName: {
+	                    required: "Last Name must be provided",
+	                    maxlength: "Last Name may not be more than 50 characters long."
+	                },
+	                phoneNumber: {
+	                    maxlength: "Phone may not be more than 25 characters long."
+	                }
+	            },
+	            submitHandler: function (form) {
+	                form.submit();
+	            }
+	        });
+
+	    $("#addMeetingParticipantLink")
+	        .click(function () {
+	            setAddParticipantToggle();
+	            $("#addMeetingParticipant").dialog("open");
+	        });
+
+
+	    $(".addParticipantMethod")
+	        .change(function () {
+	            setAddParticipantToggle();
+	        });
+
+	    
+	    $("#newParticipantEmailList")
+            .autocomplete({
+                source: function (request, response) {
+                    $.post('@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AvailableEmails"})',
+                        { id: '@Model.Id', search: request.term, maxResults: 12 },
+                        'jsonp'
+                    )
+                    .success(function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Email.toLowerCase() + " (" + item.LastName + ", " + item.FirstName + ")",
+                                value: item
+                            };
+                        }));
+                    })
+                    .fail(function (data) { alert("Error in reaching web api."); });
+                },
+                minLength: 3,
+                select: function (event, ui) {
+                    fillPersonDetails(ui.item.value);
+                    $(this).val(''); return false;
+                }
+            });
+
+	    $("#newParticipantBadgeNumberList")
+               .autocomplete({
+                   source: function (request, response) {
+                       $.post('@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AvailableBadgeNumbers"})',
+                            { id: -1, search: request.term, maxResults: 12 },
+                            'jsonp'
+                        )
+                        .success(function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.BadgeNumber + " (" + item.LastName + ", " + item.FirstName + ")",
+                                    value: item
+                                };
+                            }));
+                        })
+                        .fail(function (data) { alert("Error in reaching web api."); });
+                    },
+                    minLength: 2,
+                    select: function (event, ui) {
+                        fillPersonDetails(ui.item.value);
+                        $(this).val(''); return false;
+                    }
+                });
+	}
+	
+
+	function fillNewParticipantBuildingList() {
+	    var currentLocation = $("#newParticipantLocationList").val();
+	    var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Building"})' + '?$filter=LocationId eq ' + currentLocation;
+		var options = $("#newParticipantBuildingList");
+		options.empty();
+		$.getJSON(apiUrl, function (data) {
+			$.each(data, function (index, item) {
+				options.append($("<option />").val(item.Id).text(item.Name));
+			});
+			$("#newParticipantBuildingDiv").toggle($("#newParticipantBuildingList>option").size() > 0);
+		});
+	}
+
+
+	function fillPersonDetails(person) {
+		$("#newParticipantId").val(person.Id);
+		$("#newParticipantEmail").val(person.Email);
+		$("#newParticipantBadgeNumber").val(person.BadgeNumber);
+		$("#newParticipantFirstName").val(person.FirstName);
+		$("#newParticipantLastName").val(person.LastName);
+		$("#newParticipantPhone").val(person.Phone);
+		$("#newParticipantLocationList").val(person.LocationId);
+		fillNewParticipantBuildingList();
+		if (person.BuildingId != null) {
+			$("#newParticipantBuildingList").val(person.BuildingId);
+		}
+	}
+
+
+
+	function setAddParticipantToggle() {
+		var method = $('input.addParticipantMethod:checked').val();
+		var emailList = $("#newParticipantEmailList");
+		var badgeList = $("#newParticipantBadgeNumberList");
+		var newFields = $(".newParticipantField");
+
+		newFields.val('');
+		$("#newParticipantLocationList").prop('selectedIndex', 0);
+		fillNewParticipantBuildingList();
+
+		enable(emailList, method == "email");
+		enable(badgeList, method == "badgeNumber");
+		enable(newFields, method == "new");
+	}
+   
+
+</script>
+
+<style>
+    input.unknownParticipantCount {
+        width: 25px;
+        font-size: 1em;
+
+    }
+</style>
+
+<h3>Meeting Participants</h3> 
+ 
+<table>
+<thead>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Attended?</th>
+		<th>Travel Avoided?</th>
+		<th> </th>
+	</tr>
+</thead>
+	<tbody>
+		@foreach (var item in Model.MeetingParticipants) {
+			const string selected = "selected='selected'";
+			const string isChecked = "checked='checked'";
+			
+			var lastNameFirst = item.Person.LastName + ", " + item.Person.FirstName;
+			var firstNameFirst = item.Person.FirstName + " " + item.Person.LastName;
+			<tr>
+				<td>@(lastNameFirst)</td>
+				<td>
+					@* We can't use AJAX because AJAX and Validation HATE EACH OTHER FOR SOME DUMB REASON
+					@using (Ajax.BeginForm(
+						"UpdateParticipantType", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId},
+						new AjaxOptions {HttpMethod = "POST"}
+					)) {*@
+					@using (Html.BeginForm(
+						"UpdateParticipantType", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId},
+						FormMethod.Post
+					)) {
+						@Html.AntiForgeryToken()
+						<select name="type" class="participantInfoControl">
+							<option value="0" @(((int)item.Type == 0) ? selected : "" )>Physical</option>
+							<option value="1" @(((int)item.Type == 1) ? selected : "" )>Virtual</option>
+						</select>
+					}   
+				</td>
+				<td>
+					@*@using (Ajax.BeginForm(
+						"UpdateParticipantAttendance", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId},
+						new AjaxOptions {HttpMethod = "POST"}
+					)) {*@
+					@using (Html.BeginForm(
+						"UpdateParticipantAttendance", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId},
+						FormMethod.Post
+					)) {
+						@Html.AntiForgeryToken()
+						<input type="hidden" id="attendanceHidden" name="attended" value="@(item.Attended.ToString())" />
+						<input type="checkbox" id="attendanceCheckbox" class="participantAttendanceCheckbox" @((item.Attended) ? isChecked : "") />
+					}
+				</td>
+				<td>
+					@*@using (Ajax.BeginForm(
+						"UpdateParticipantTravelAvoided", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId},
+						new AjaxOptions {HttpMethod = "POST"}
+					)) {*@
+					@using (Html.BeginForm(
+						"UpdateParticipantTravelAvoided", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId},
+						FormMethod.Post
+					))
+					{
+						@Html.AntiForgeryToken()
+						<select name="travelAvoided" class="participantInfoControl">
+							<option value="0" @(((int)item.TravelAvoided == 0) ? selected : "" )>No</option>
+							<option value="1" @(((int)item.TravelAvoided == 1) ? selected : "" )>Yes</option>
+							<option value="-1" @(((int)item.TravelAvoided == -1) ? selected : "" )>Maybe</option>
+						</select>
+					}
+						 
+				</td>
+				<td>
+					@using (Html.BeginForm(
+						"RemoveParticipant", "Meeting",
+						new { meetingId = Model.Id, participantId = item.PersonId },
+						FormMethod.Post
+					)) {
+						@Html.AntiForgeryToken()
+						<a class="removeParticipantLink buttonLink" title="Remove @(firstNameFirst) from the meeting">
+							<img class="buttonLink" src="/Images/icons/Delete/Delete_16x16.png" alt="Delete"/>
+						</a>
+					}
+				</td>
+			</tr>
+		}
+		<tr>
+			<td colspan="5">
+				<a id="addMeetingParticipantLink" class="buttonLink" title="Add a Participant">
+					<img class="buttonLink" src="/Images/icons/Add/Add_16x16.png" alt="Add" />Add
+				</a>
+			</td>
+		</tr> 
+	</tbody>
+    <tfoot id="addMeetingParticipantFooter">
+        <tr>
+            <td colspan="5"><b>Unidentified Participants:</b></td>
+		</tr> 
+        <tr>
+            <td colspan="5">
+                @using (Html.BeginForm(
+                    "SetUnknownParticipantCount", "Meeting",
+					new { meetingId = Model.Id },
+					FormMethod.Post,
+		            htmlAttributes: new { id = "unknownParticipantCountForm" }
+				)) {
+		        @Html.AntiForgeryToken()
+                <text>
+                    Travel Avoided: <input id="unknownCountYes" class="unknownParticipantCount" name="yes" maxlength="2" value='@Model.UnknownParticipants_TravelAvoided' />  
+                    Maybe: <input id="unknownCountMaybe" class="unknownParticipantCount" name="maybe"  maxlength="2" value='@Model.UnknownParticipants_TravelMaybeAvoided'/>
+                    No: <input id="unknownCountNo" class="unknownParticipantCount" name="no"  maxlength="2" value='@Model.UnknownParticipants_TravelNotAvoided'/>
+                </text>
+                }
+            </td>
+		</tr> 
+    </tfoot>
+</table>
+
+
+<div id="addMeetingParticipant" title="Add Meeting Participant">
+	@using (Html.BeginForm("AddParticipant", "Meeting",
+		method: FormMethod.Post,
+		routeValues: new { meetingId = Model.Id },
+		htmlAttributes: new { id = "addMeetingParticipantForm" }
+	)) {
+		@Html.AntiForgeryToken()
+
+		<fieldset>
+			<legend>Add Participant to Meeting</legend>
+			<div style="float: left;">
+				<div style="float: left;">
+					<input type="radio" class="addParticipantMethod" name="addParticipantMethod" value="email" checked="checked" >Find by Email:<br/>
+					<input id="newParticipantEmailList" name="emailInput" />
+					<br/>
+
+					<input type="radio" class="addParticipantMethod" name="addParticipantMethod" value="badgeNumber">Find by Badge #:<br/>
+					<input type="text" id="newParticipantBadgeNumberList" name="badgeNumberInput" />
+					<br/>
+
+					<input type="radio" class="addParticipantMethod" name="addParticipantMethod" value="new">New Person:
+				</div>
+				<div style="float: left;">
+					<input type="hidden" id="newParticipantId" name="personId"/>
+					<input type="hidden" name="meetingId" value="@(Model.Id)"  />
+
+					<div class="editor-label"><label for="email">Email</label></div>
+					<div class="editor-field">
+						<input type="text" id="newParticipantEmail" class="newParticipantField" name="email" maxlength="50" >
+					</div>
+
+					<div class="editor-label"><label for="badgeNumber">Badge #</label></div>
+					<div class="editor-field">
+						<input type="text" id="newParticipantBadgeNumber" class="newParticipantField" name="badgeNumber" maxlength="6" >
+					</div>
+
+					<div class="editor-label"><label for="firstName">First Name</label></div>
+					<div class="editor-field">
+						<input type="text" id="newParticipantFirstName" class="newParticipantField" name="firstName" maxlength="50" >
+					</div>
+
+					<div class="editor-label"><label for="lastName">Last Name</label></div>
+					<div class="editor-field">
+						<input type="text" id="newParticipantLastName" class="newParticipantField" name="lastName" maxlength="50" >
+					</div>
+
+					<div class="editor-label"><label for="phoneNumber">Phone</label></div>
+					<div class="editor-field">
+						<input type="text" id="newParticipantPhone" class="newParticipantField" name="phoneNumber" maxlength="25" >
+					</div>
+
+					<div class="editor-label"><label for="locationId">Location</label></div>
+					<div class="editor-field">
+						<select id="newParticipantLocationList" name="locationId" class="newParticipantField locationList"></select>
+					</div>
+					<div id="newParticipantBuildingDiv">
+						<div class="editor-label"><label for="buildingId">Building</label></div>
+						<div class="editor-field">
+							<select id="newParticipantBuildingList" name="buildingId" class="newParticipantField"></select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="personErrors"></div>
+		</fieldset>
+	}
+</div>

@@ -1,0 +1,622 @@
+﻿@using VtcIts
+@using VtcIts.Models
+@model VtcIts.Models.Meeting
+
+<script>
+    // ------------------------------------------------------------------------
+    // For calling in $()
+    // ------------------------------------------------------------------------
+    function initialize_Details() {
+        
+        // Load data if that's what you're doin'
+        // -------------------------------------------------------------------
+        var techsUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "KemtahTech"})';
+        
+        $.getJSON(techsUrl, function (data) {
+            var options = $('#detailsKemtahTechList');
+            options.empty();
+            $.each(data, function (index, item) {
+                var name = item.FirstName + ' ' + item.LastName;
+                options.append($('<option />').val(item.Id).text(name));
+            });
+            options.val(@Model.TechnicianId);
+        });
+        
+        @if(Model.SeriesId.HasValue) {
+            <text>
+            var seriesUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})' + 
+                '?$filter=SeriesId eq @Model.SeriesId and Status eq @((int)MeetingStatus.BeforeStart)';
+
+            $.getJSON(seriesUrl, function (data) {
+                var list = $('#recurrenceDeletionPreviewList');
+                list.empty();
+                $.each(data, function (index, item) {
+                    list.append($("<li/>").text(new Date(item.Start).toLocaleDateString()));
+                });
+            });
+            
+            </text>
+        }
+        setupTimeSpinner();
+
+
+        // Dialog configuration
+        // --------------------------------------------------------------------
+        $("#editMeetingDetails")
+        .dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 405,
+            buttons: {
+                "Save": function () {
+                    updateDateTimeField('start');
+                    updateDateTimeField('end');
+                    $("#editMeetingDetailsForm").submit();
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            },
+            close: function () { }
+        });
+
+
+        $('#setRecurrence')
+        .dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 400,
+            buttons: {
+                'Commit': function () {
+                    createSeries();
+                    $(this).dialog('close');
+                },
+                Cancel: function () {
+                    $(this).dialog('close');
+                }
+            },
+            close: function () { }
+        });
+        
+
+        $('#deleteRecurrence')
+        .dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 365,
+            buttons: {
+                'Confirm': function () {
+                    $('#deleteRecurrenceForm').submit();
+                    $(this).dialog('close');
+                },
+                Cancel: function () {
+                    $(this).dialog('close');
+                }
+            },
+            close: function () { }
+        });
+
+
+         // Validation
+        // --------------------------------------------------------------------
+        jQuery.validator.addMethod("startParsesToTime", function (value, element) {
+            var testTime = Globalize.parseDate(value);
+            return testTime != null;
+        }, "Start must be a valid time.");
+
+        jQuery.validator.addMethod("endParsesToTime", function (value, element) {
+            var testTime = Globalize.parseDate(value);
+            return testTime != null;
+        }, "End must be a valid time.");
+
+
+        $("#editMeetingDetailsForm")
+            .removeAttr("novalidate")
+            .validate({
+                errorLabelContainer: "#editErrors",
+                wrapper: "li",
+                rules: {
+                    title: { required: true, maxlength: 50 },
+                    meetingDate: { required: true, date: true },
+                    meetingEndTime: { required: true, endParsesToTime: true },
+                    meetingStartTime: { required: true, startParsesToTime: true },
+                    footprintsTicket : { maxlength: 50 }
+                },
+                messages: {
+                    meetingDate: "Date must be provided.",
+                    title: {
+                        required: "Title must be provided.",
+                        maxlength: "Title may not be more than 50 characters long."
+                    },
+                    footprintsTicket: {
+                         maxlength: "Footprints may not be more than 50 characters long."
+                    }
+                },
+
+                submitHandler: function (form) {
+                    updateDateTimeField('start');
+                    updateDateTimeField('end');
+                    form.submit();
+                }
+            });
+
+
+
+        // Link Handlers
+        // --------------------------------------------------------------------
+        $("#editDetailsLink")
+        .click(function () {
+            $("#editMeetingDetails").dialog("open");
+        });
+        
+
+        $('#deleteRecurrenceLink')
+        .click(function () {
+            $('#deleteRecurrence').dialog('open');
+        });
+
+
+        $('#setRecurrenceLink')
+        .click(function () {
+            $('#recurrenceInterval').val('1');
+            $('#recurrenceCount').val('2');
+            $('#recurrenceEndDate').val();
+            $('#recurrenceFrequencyList').val(RRule.WEEKLY);
+            $('#recurrenceEndDate').val('@Model.Start.AddDays(14).ToString("MM/dd/yyyy")');
+
+            setRepeatMethodToggle();
+            showRecurrencePreview();
+            $('#setRecurrence').dialog('open');
+        });
+        
+
+        // Time Spinners
+        // --------------------------------------------------------------------
+        $('#meetingStartTime')
+        .timespinner({
+            spin: function (event, ui) {
+                var isValid = validateTimes(ui, 'start');
+                if (isValid) {
+                    updateDateTimeField('start');
+                    updateDateTimeField('end');
+                }
+                return isValid;
+            }
+        });
+
+
+        $('#meetingEndTime')
+        .timespinner({
+            spin: function (event, ui) {
+                var isValid = validateTimes(ui, 'end');
+                if (isValid) {
+                    updateDateTimeField('start');
+                    updateDateTimeField('end');
+                }
+                return isValid;
+            }
+        });
+
+
+        // Date Pickers
+        // --------------------------------------------------------------------
+        $('#meetingDate')
+        .change(function() {
+            updateDateTimeField('start');
+            updateDateTimeField('end');
+        })
+        //.val()
+        .datepicker({
+            changeMonth: true,
+            changeYear: true,
+            minDate: -0,
+            maxDate: maxDate
+        });
+
+
+        $('#recurrenceEndDate')
+        .datepicker({
+            changeMonth: true,
+            changeYear: true,
+            minDate: -0
+        });
+
+
+        // Change event handlers
+        // --------------------------------------------------------------------
+        $('#recurrenceFrequencyList')
+        .change(function () {
+            var frequency = $('#recurrenceFrequencyList option:selected').text();
+            $('.recurrenceFrequencyText').text(frequency);
+        });
+
+
+        $('.setReccurenceInput')
+        .change(function () {
+            $('#recurrenceInterval').val(Math.abs(parseInt($('#recurrenceInterval').val())));
+            showRecurrencePreview();
+        });
+
+
+        $('.repeatMethod')
+        .change(function () {
+            setRepeatMethodToggle();
+        });
+        
+    }
+
+
+    /// -------------------------------------------------------------------
+    /// Create Recurrences
+    /// -------------------------------------------------------------------
+    function createSeries() {
+        var rule = getRecurrenceRule();
+        var dateList = "";
+
+        rule.all().forEach(function (item) {
+            if (item > today) { dateList += item.toLocaleDateString() + "|"; }
+        });
+
+        $('#setRecurrenceFormDateList').val(dateList);
+        $('#setRecurrenceFormRecurrenceText').val(rule.toString());
+
+        $('#createRecurrenceForm').submit();
+    }
+
+
+    /// -------------------------------------------------------------------
+    /// Assemble the recurrence rule from the dialog controls
+    /// -------------------------------------------------------------------
+    function getRecurrenceRule() {
+        var frequencies = new Array(RRule.YEARLY, RRule.MONTHLY, RRule.WEEKLY, RRule.DAILY);
+        var frequency = frequencies[$('#recurrenceFrequencyList').val()];
+        var method = $('input.repeatMethod:checked').val();
+
+        if (method == 'endDate') {
+            var until = new Date($('#recurrenceEndDate').val());
+            return new RRule(frequency, { dtstart: eventDay, until: until });
+        } else {
+            var count = parseInt($('#recurrenceCount').val()) + 1;
+            var interval = $('#recurrenceInterval').val();
+            return (interval == 1)
+            ? new RRule(frequency, { dtstart: eventDay, count: count })
+            : new RRule(frequency, { count: count, dtstart: eventDay, interval: interval });
+        }
+    }
+
+
+    /// -------------------------------------------------------------------
+    /// Toggle the Repeat Method controls
+    /// -------------------------------------------------------------------
+    function setRepeatMethodToggle() {
+        var method = $('input.repeatMethod:checked').val();
+        enable($('#recurrenceEndDate'), method == 'endDate');
+        enable($('.recurrenceNumberInput'), method == 'iterations');
+    }
+
+
+    /// -------------------------------------------------------------------
+    /// Preview the meetings that will be generated by the current 
+    /// recurrence settings
+    /// -------------------------------------------------------------------
+    function showRecurrencePreview() {
+        var previewText = $('#recurrencePreviewText');
+        var previewList = $('#recurrencePreviewList');
+
+        previewText.text('');
+        var rule = getRecurrenceRule();
+        previewText.text("The series will repeat " + rule.toText() + " (including this one):");
+
+        previewList.empty();
+        rule.all().forEach(function (item) {
+            if (item > today) {
+                previewList.append($("<li/>").text(item.toLocaleDateString()));
+            }
+        });
+    }
+
+
+    /// -------------------------------------------------------------------
+    /// Combines the date and the appropriate time field into a single 
+    /// DateTime value
+    /// -------------------------------------------------------------------
+    function updateDateTimeField(fieldChanged) {
+        var date = Globalize.parseDate($('#meetingDate').val());
+        var time = Globalize.parseDate(
+            (fieldChanged == 'start')
+                ? $('#meetingStartTime').val()
+                : $('#meetingEndTime').val()
+        );
+
+        var output = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            time.getHours(),
+            time.getMinutes(),
+            0, 0
+        );
+
+        $(((fieldChanged == 'start')
+                ? $('#startDateTime')
+                : $('#endDateTime')
+            ).val(output.toISOString())
+        );
+    }
+
+
+
+    /// -------------------------------------------------------------------
+    /// Ensures that the specified times are valid with respect to each
+    /// other.
+    /// -------------------------------------------------------------------
+    function validateTimes(ui, fieldChanged) {
+        return isValidTime(ui,
+            $('#meetingStartTime').val(),
+            $('#meetingEndTime').val(),
+            fieldChanged
+        );
+    }
+
+
+</script>
+
+
+<style>
+    input.timeSpinner {
+        text-align: center;
+        width: 75px;
+    }
+
+    input.details, textarea.details {
+        width: 365px;
+    }
+
+    input.recurrenceNumberInput {
+        text-align: center;
+        width: 25px;
+    }
+</style>
+
+<div style="vertical-align: top;height: 30px;">
+<h3><b>@Model.Start.ToString("MM/dd/yyyy")</b> - 
+        <b>@Model.Start.ToString("hh:mm tt")</b> to  
+    <b>@Model.End.ToString("hh:mm tt")</b> CST</h3> 
+</div>
+<fieldset>
+    <legend>Meeting</legend>
+    <div class='display-label' style="float:left;padding-right: 20px;">
+        <label for='id'>ID</label>
+    </div>
+    <div class='display-field' style="float:left;">@Model.Id</div>
+
+    <div class='display-label' style="clear:both;">
+        <label for='description'>Description</label>
+    </div>
+    <div class='display-field'>
+        @Html.Raw(Model.Description.Replace(Environment.NewLine,"<br/>"))
+    </div>
+
+    <div style="width: 100%">
+        <div style="width: 60%; float: left;">
+            <div class='display-label'>
+                <label for='description'>Status</label>
+            </div>
+            <div class='display-field'>
+                @Model.GetStatusText()
+                @if (Model.Status != MeetingStatus.Closed) {
+                    <div style="width: 100%;  margin-top: 5px;">
+                        @Html.Partial("_WorkflowEdit", Model)
+                    </div>
+                }
+            </div>
+        </div>
+        <div style="width: 40%; float: left;">
+            <div class='display-label'>
+                <label for='description'>Source</label>
+            </div>
+            <div class='display-field'>
+                @Model.Source.ToPrintText()
+            </div>
+        </div>
+        
+    </div>
+    
+    <div style="width: 100%">
+        <div style="width: 60%; float: left;">
+            <div class='display-label'>
+                <label for='detailsKemtahTechList'>Kemtah Technician</label>
+            </div>
+            <div class='display-field'>
+                @if (Model.TechnicianId != -1) {
+                    @(Model.KemtahTech.FirstName + " " + Model.KemtahTech.LastName)
+                } else {
+                    <span style="color: red;">No Techician Assigned</span>
+                }
+            </div>
+        </div>
+        <div style="width: 40%; float: left;">
+            <div class='display-label'>
+                <label for='footprintsTicket'>Footprints</label>
+            </div>
+            <div class='display-field'>
+                @Model.FootprintsTicket
+            </div>
+        </div>
+    </div>
+
+    <div class='display-label'>
+        <label for='notes'>Notes</label>
+    </div>
+    <div class='display-field'>
+        @Html.Raw(Model.Notes.Replace(Environment.NewLine,"<br/>"))
+    </div>
+</fieldset>
+
+<div style="clear: both; padding-top: 10px">
+    @if (Model.IsEditable()) {
+        <div style="float: left;">
+            <a id="editDetailsLink" class="buttonLink" title="Edit this Meeting's details">
+                <img class="buttonLink" src="/Images/icons/Edit/Edit_16x16.png" alt="Edit Meeting Details" />Edit
+            </a>
+        </div>
+    }
+    @if (Model.IsEditable()) {
+        <div style="float: left;">
+            @if (!Model.SeriesId.HasValue) {
+                <a id="setRecurrenceLink" class="buttonLink" title="Setup Recurrence for this Meeting">
+                    <img class="buttonLink" src="/Images/icons/Synchronize/Synchronize_16x16.png" alt="Set Recurrence" />Set Recurrence
+                </a>
+            } else {
+                <a id="deleteRecurrenceLink" class="buttonLink" title="Delete this Meeting's Recurrence">
+                    <img class="buttonLink" src="/Images/icons/Delete/Delete_16x16.png" alt="Delete Recurrence" />Delete Recurrence
+                </a>
+            }
+        </div>
+    }
+    <div style="float:left;">
+        @if (Model.Status == MeetingStatus.Closed && !Model.SurveySent) {
+            using (Html.BeginForm("SendSurvey", "Meeting",
+                                  method: FormMethod.Post,
+                                  routeValues: new { meetingId = Model.Id },
+                                  htmlAttributes: new { style = "float:left;" }
+                )) {
+                @Html.AntiForgeryToken()
+                <a class="buttonLink" onclick='$(this).closest("form").submit();' title="Send the Survey to this Meeting's Participants">
+                    <img class="buttonLink" src="/Images/icons/Mail/Mail_16x16.png" alt="Send Survey" />Send Survey
+                </a>
+            }
+        }
+    </div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- Edit Details / Recurrence Dialogs -->
+<!-- ====================================================================== -->
+
+<div id='editMeetingDetails' title='Edit Meeting Details' style="clear:both;">
+    @using (Html.BeginForm("Edit", "Meeting",
+        method: FormMethod.Post,
+        htmlAttributes: new { id = "editMeetingDetailsForm" }
+    ))
+    {
+        @Html.AntiForgeryToken()
+    
+        <fieldset>
+            <legend>Meeting</legend>
+        
+            <input type='hidden' id='id' name='meetingId' value="@Model.Id" />
+
+            <div class='editor-label'>
+                <label for='title'>Title</label>
+            </div>
+            <div class='editor-field'>
+                <input type='text' id='title' name='title' class='details' value='@Model.Title' />
+            </div>
+
+            <div class='editor-label'>
+                <label for="meetingDate">When</label>
+                <label for="meetingStartTime" style="display: none;">Start Time</label>
+                <label for="meetingEndTime" style="display: none;">End Time</label>
+            </div>
+            <div class='editor-field' style='vertical-align: central;'>
+                <input id='meetingDate' style='text-align: center; width: 85px;' value='@Model.Start.ToString("MM/dd/yyyy")' name='meetingDate' /> 
+                <input id='meetingStartTime' value='@Model.Start.ToString("hh:mm tt")' class='timeSpinner' name='meetingStartTime'  /> to 
+                <input id='meetingEndTime' value='@Model.End.ToString("hh:mm tt")' class='timeSpinner' name='meetingEndTime' /> CST
+                <input type='hidden' id='startDateTime' name='startDateTime' value='@Model.Start.ToString()' />
+                <input type='hidden' id='endDateTime' name='endDateTime' value='@Model.End.ToString()' />
+            </div>
+
+            <div class='editor-label'>
+                <label for='description'>Description</label>
+            </div>
+            <div class='editor-field'>
+                <textarea id='description' name="description" rows='4' class='details'>@(Model.Description)</textarea>
+            </div>
+      
+
+            <div class='editor-label'>
+                <label for='footprintsTicket'>Footprints Ticket(s)</label>
+            </div>
+            <div class='editor-field'>
+                <input type='text' id='footprintsTicket' name='footprintsTicket' class='details' value='@Model.FootprintsTicket' />
+            </div>
+            
+            <div class='editor-label'>
+                <label for='detailsKemtahTechList'>Kemtah Technician</label>
+            </div>
+            <div class='editor-field'>
+                <select id='detailsKemtahTechList' name='techId'></select>
+            </div>
+
+            <div class='editor-label'>
+                <label for='notes'>Notes</label>
+            </div>
+            <div class='editor-field'>
+                <textarea rows='6' name="notes" class='details'>@(Model.Notes)</textarea>
+            </div>
+            <div id="editErrors"></div>
+        </fieldset>
+    }    
+</div>
+
+<div id="setRecurrence" title="Set Meeting Recurrence">
+    @using (Html.BeginForm("CreateRecurrence", "Meeting",
+        method: FormMethod.Post,
+        routeValues: new { meetingId = Model.Id },
+        htmlAttributes: new { id = "createRecurrenceForm" }
+    ))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="setRecurrenceFormDateList" name="dateList"/>
+        <input type="hidden" id="setRecurrenceFormRecurrenceText" name="recurrenceText"/>
+    }
+    <fieldset>
+        <legend>Add Meeting Recurrence</legend>
+            
+        Repeat 
+        <select id='recurrenceFrequencyList' class='setReccurenceInput'>
+            <option value='3'>Day(s)</option>
+            <option value='2'>Week(s)</option>
+            <option value='1'>Month(s)</option>
+            <option value='0'>Year(s)</option>
+        </select><br/>
+            
+        <input type='radio' class='repeatMethod setReccurenceInput' name='repeatMethod' value='iterations'  checked='checked'>
+        Every <input type='text' id='recurrenceInterval' name='interval' class='recurrenceNumberInput setReccurenceInput' /> 
+        <span class='recurrenceFrequencyText'>Week(s)</span> 
+        for
+        <input type='text' id='recurrenceCount' name='iterations' class='recurrenceNumberInput setReccurenceInput'/> 
+        <span class='recurrenceFrequencyText'>Week(s)</span> 
+        <br/>
+
+        <input type='radio' class='repeatMethod setReccurenceInput' name='repeatMethod' value='endDate'>
+        Until 
+        <input id='recurrenceEndDate'  class='setReccurenceInput' style='text-align: center; width: 95px;'/>
+        <br/>
+            
+        <div id='recurrencePreviewText' style="font-size:small;"></div>
+        <ul id='recurrencePreviewList' style="font-size:small;"></ul>
+    </fieldset>
+</div>
+
+<div id="deleteRecurrence" title="Delete Recurrence">
+    @using (Html.BeginForm("DeleteRecurrence", "Meeting",
+        method: FormMethod.Post,
+        routeValues: new { sourceMeetingId = Model.Id, seriesId = Model.SeriesId },
+        htmlAttributes: new { id = "deleteRecurrenceForm" }
+    ))
+    {   
+        @Html.AntiForgeryToken() 
+        <fieldset>
+            <legend>Meeting</legend>
+            <input type='radio' name='deleteMethod' value='minimal' checked='checked'>Series association and information only<br/>
+            <input type='radio' name='deleteMethod' value='total'>Series and all open meetings in the series
+        </fieldset>
+    }
+    <ul id='recurrenceDeletionPreviewList' style="font-size:small;"></ul>
+        
+</div>

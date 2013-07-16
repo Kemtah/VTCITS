@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+        <script src="/Scripts/jquery-1.9.1.js"></script>
+        <script src="/Scripts/jquery-1.9.1.js"></script>
+        <script src="/Scripts/jquery-ui-1.10.3.js"></script>
+        <script src="/Scripts/globalize.js"></script>
+        <script src="/Scripts/jquery.validate.js"></script>
+        <script src="/Scripts/fullcalendar.js"></script>
+        <link href="/Content/themes/base/jquery-ui.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.accordion.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.all.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.base.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.button.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.core.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.datepicker.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.dialog.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.menu.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.progressbar.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.resizable.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.selectable.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.slider.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.spinner.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.tabs.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.theme.css" rel="stylesheet"/>
+        <link href="/Content/themes/base/jquery.ui.tooltip.css" rel="stylesheet"/>
+    <script>
+        $(function() {
+
+        //url: "http://ws.geonames.org/searchJSON",
+        //dataType: "jsonp",
+        //data: {
+        //          featureClass: "P",
+        //          style: "full",
+        //          maxRows: 12,
+        //          name_startsWith: request.term
+        //      },
+
+
+            $("#newRequesterEmail")
+                .autocomplete({
+                    source: function (request, response) {
+                        $.post('/api/AvailableEmails/',
+                            {
+                                id: 49,
+                                search: request.term,
+                                maxResults: 12
+                            },
+                            'jsonp'
+                        ).success(function (data) {
+                            response($.map(data, function (item) {
+                                var name = item.LastName + ", " + item.FirstName;
+                                var email = item.Email.toLowerCase();
+                                return {
+                                    label: email + " (" + name + ")"
+                                };
+                            }));
+
+                            $("#results").append('Success! Response:<br/><br/>');
+                            $("#results").append(JSON.stringify(data) + '<br/>');
+                        }).fail(function (data) {
+                            $("#results").append('Failure! Response:<br/><br/>');
+                            $("#results").append(JSON.stringify(data) + '<br/>');
+                        });
+
+
+                        //$.ajax({
+                        //    type: 'POST',
+                        //    url: 
+                        //    dataType: "jsonp",
+                        //    data: {
+                        //        id: 49,
+                        //        search: request.term,
+                        //        maxResults: 12
+                        //    },
+                        //    success: function (data) {
+                        //        $("#results").text = JSON.stringify(data);
+                        //        alert("got it");
+                        //        //response($.map(data.geonames, function (item) {
+
+                        //        //    return {
+                        //        //        label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+                        //        //        value: item.name
+                        //        //    };
+                        //        //}));
+                        //    },
+                        //    error: function(data) {
+                        //        $("#results").text = JSON.stringify(data);
+                        //    }
+                        //});
+                    },
+                    minLength: 2,
+                })
+                //.data("ui-autocomplete")._renderItem = function(ul, item) {
+                //    var name = item.LastName + ", " + item.FirstName;
+                //    var email = item.Email.toLowerCase();
+                //    var text = email + " (" + name + ")";
+                //    return $("<li>")
+                //        .append("<a>" + text + "</a>")
+                //        .appendTo(ul);
+                //};
+                ;
+
+        });
+    </script>
+
+</head>
+<body>
+    <input type="text" id="newRequesterEmail" class="newRequesterField" name="email" maxlength="50" >
+    <div id="results"></div>
+</body>
+</html>

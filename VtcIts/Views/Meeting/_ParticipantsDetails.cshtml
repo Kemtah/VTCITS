@@ -1,0 +1,38 @@
+﻿@using VtcIts
+@model VtcIts.Models.Meeting
+
+<h3>Meeting Participants</h3> 
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Attended?</th>
+			<th>Travel Avoided?</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.MeetingParticipants) {
+			const string isChecked = "checked='checked'";
+			
+			<tr>
+				<td>@(item.Person.LastName + ", " + item.Person.FirstName)</td>
+				<td>@( item.Type.ToPrintText())</td>
+				<td><input type="checkbox" @((item.Attended) ? isChecked : "") disabled="disabled" /></td>
+				<td>@( item.TravelAvoided.ToPrintText())</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot id="addMeetingParticipantFooter">
+		<tr>
+			<td colspan="5"><b>Unidentified Participants:</b></td>
+		</tr> 
+		<tr>
+			<td colspan="5">
+			Travel Avoided: @Model.UnknownParticipants_TravelAvoided
+			Maybe: @Model.UnknownParticipants_TravelMaybeAvoided
+			No: @Model.UnknownParticipants_TravelNotAvoided
+			</td>
+		</tr> 
+	</tfoot>
+</table>

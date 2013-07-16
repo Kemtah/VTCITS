@@ -1,0 +1,63 @@
+﻿@using VtcIts
+@model VtcIts.Models.Meeting
+
+<script>
+    function applyWorkflow(newStatus) {
+        $('#applyWorkflowFormAction').val(newStatus);
+        $('#applyWorkflowForm').submit();
+    }
+</script>
+
+<style>
+    a.workflowLink {
+        font-size: large;
+        font-weight: bold;
+    }
+</style>
+
+@using(Html.BeginForm(
+    "ApplyWorkflow","Meeting", 
+    new { meetingId=Model.Id },
+    FormMethod.Post,
+    new { id="applyWorkflowForm"}
+)) {
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <input type="hidden" id="applyWorkflowFormAction" name="status" />
+        @if (Model.Status == MeetingStatus.BeforeStart) {
+        <text>
+            <a class="buttonLink"
+               href='javascript:applyWorkflow(1);' 
+               title='Start this meeting'
+                >
+                <img class="buttonLink" src="/Images/icons/Play/Play_16x16.png" alt="Start" />Start
+            </a>
+            
+            <a class="buttonLink"
+               href='javascript:applyWorkflow(3);' 
+               title='Cancel this meeting'
+            >
+                <img class="buttonLink" src="/Images/icons/Cancel/Cancel_16x16.png" alt="Cancel" />Cancel
+            </a>
+        </text>
+        } else if (Model.Status == MeetingStatus.InProgress) {
+        <text>
+            <a class="buttonLink"
+               href='javascript:applyWorkflow(2);' 
+               title='Cancel this meeting'
+            >
+                <img class="buttonLink" src="/Images/icons/Stop/Stop_16x16.png" alt="Close" />Close
+            </a>
+        </text>
+        } else if (Model.Status == MeetingStatus.Cancelled) {
+        <text>
+            <a class="buttonLink"
+               href='javascript:applyWorkflow(0);' 
+               title='Reopen this meeting'
+            >
+                <img class="buttonLink" src="/Images/icons/Undo/Undo_16x16.png" alt="Reopen" />Reopen
+            </a> 
+        </text>
+        }
+    </fieldset>
+} 

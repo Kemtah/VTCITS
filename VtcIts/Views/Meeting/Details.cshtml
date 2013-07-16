@@ -1,0 +1,50 @@
+﻿@model VtcIts.Models.Meeting
+
+<div style="clear:both; text-align:center;">
+    <h2>@Model.Title</h2>
+</div>
+
+<div style="horiz-align: center;">
+    <div class="outerSection" >
+        <div class="innerSection">
+            @Html.Partial("_DetailsDetails", Model)
+        </div>
+        <div class="innerSection">
+            @Html.Partial("_RequesterDetails", Model)
+        </div>
+    </div>
+
+    @if (
+        Model.MeetingParticipants.Count > 0 ||
+        Model.Rooms.Count > 0
+    ) {
+        <div class="outerSection">
+            @if (Model.MeetingParticipants.Count > 0) {
+                <div class="innerSection">
+                    @Html.Partial("_ParticipantsDetails", Model)
+                </div>
+            }
+            @if (Model.Rooms.Count > 0) {
+                <div class="innerSection">
+                    @Html.Partial("_RoomsDetails", Model)
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.ExternalLocations.Count > 0) {
+        <div class="outerSection">
+             <div class="innerSection">
+                @Html.Partial("_ExLocationsDetails", Model)
+            </div>
+        </div>
+    }
+
+    <div style="clear:both; text-align: center;">
+        @if (Request.IsAuthenticated) {
+            @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) <text> | </text>
+        }
+        @Html.ActionLink("Back to List", "Index", "Home")
+    </div>
+</div>
+

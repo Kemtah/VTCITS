@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "VTC Calendar";
+}
+
+@section Styles {
+    @Styles.Render("~/Content/fullcalendar")
+    <style>
+        .fc-event {
+            cursor: pointer;
+            
+        }
+    </style>
+}
+
+
+@section Scripts {
+    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/mousewheel")
+    @Scripts.Render("~/bundles/fullcalendar")
+
+    <script>
+  
+        /// -------------------------------------------------------------------
+        ///  Document.Ready
+        /// -------------------------------------------------------------------
+        $(function() {
+
+            // Configure the calendar
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultView: 'agendaWeek',
+                disableDragging: true,
+                disableResizing: true,
+                events: '/api/Event',
+                theme: true,
+                allDaySlot: false,
+                defaultEventMinutes: 60,
+                eventClick: function(calEvent, jsEvent, view) {
+                    window.location = ("/Meeting/Details/" + calEvent.id.toString());
+                }
+            });
+
+        });
+
+
+        /// -------------------------------------------------------------------
+        /// Handles the newMeetingButton.click event
+        /// -------------------------------------------------------------------
+        function newMeetingButton_Click() {
+           
+        }
+        
+
+    </script>
+
+}
+
+<br/>
+<hr/>
+@if (Request.IsAuthenticated) {
+<text>
+    View Reports: 
+</text>
+    @Html.ActionLink("Summary", "SummaryReport", "Meeting")<text>|</text>
+    @Html.ActionLink("Detailed", "DetailedReport", "Meeting")
+}<br/>
+@Html.ActionLink("Create New", "Create", "Meeting")
+
+
+<div id='calendar'></div>

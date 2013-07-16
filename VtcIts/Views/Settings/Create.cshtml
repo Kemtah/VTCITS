@@ -1,0 +1,68 @@
+﻿@model VtcIts.Models.Setting
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Setting</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.RegistrationAllowed)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RegistrationAllowed)
+            @Html.ValidationMessageFor(model => model.RegistrationAllowed)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EmailEnabled)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EmailEnabled)
+            @Html.ValidationMessageFor(model => model.EmailEnabled)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SurveyLink)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SurveyLink)
+            @Html.ValidationMessageFor(model => model.SurveyLink)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SystemMailName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SystemMailName)
+            @Html.ValidationMessageFor(model => model.SystemMailName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SystemMailAddress)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SystemMailAddress)
+            @Html.ValidationMessageFor(model => model.SystemMailAddress)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

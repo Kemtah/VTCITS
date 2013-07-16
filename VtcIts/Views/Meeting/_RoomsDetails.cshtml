@@ -1,0 +1,20 @@
+﻿@model VtcIts.Models.Meeting
+
+<h3>ANL Conference Rooms</h3> 
+ 
+<table>
+    <thead>
+        <tr>
+            <th>Building</th>
+            <th>Room</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Rooms) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Building.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+            </tr>
+        }
+    </tbody>
+</table>

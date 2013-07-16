@@ -1,0 +1,342 @@
+﻿@using VtcIts.Models
+@model VtcIts.Models.Meeting
+
+<script>
+
+    // ------------------------------------------------------------------------
+    // For calling in $()
+    // ------------------------------------------------------------------------
+    function initialize_Requester() {
+        var locationUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Location"})';
+
+        $.getJSON(locationUrl, function (data) {
+            var options = $("#newRequesterLocationList");
+            options.empty();
+            $.each(data, function (index, item) {
+                options.append($("<option />").val(item.Id).text(item.Name));
+            });
+            fillNewRequesterBuildingList();
+        });
+        
+        $("#newRequesterLocationList")
+            .change(function () {
+                fillNewRequesterBuildingList();
+            });
+        
+        $("#editRequester")
+            .dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                width: 650,
+                buttons: {
+                    "Save": function () {
+                        $("#editRequesterForm").submit();
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                close: function () { }
+            });
+
+
+        $('#editRequesterForm')
+            .removeAttr("novalidate")
+            .validate({
+                errorLabelContainer: "#requesterErrors",
+                wrapper: "li",
+                rules: {
+                    badgeNumber: { rangelength: [5, 6], number: true },
+                    email: { required: true, email: true, maxlength: 50 },
+                    firstName: { required: true, maxlength: 50 },
+                    lastName: { required: true, maxlength: 50 },
+                    phoneNumber: { maxlength: 25 }
+                },
+                messages: {
+                    badgeNumber: "Badge # must be 6 digits long.",
+                    email: {
+                        required: "Email must be provided.",
+                        email: "Email must be a valid email address",
+                        maxlength: "Email may not be more than 50 characters long."
+                    },
+                    firstName: {
+                        required: "First Name must be provided",
+                        maxlength: "First Name may not be more than 50 characters long."
+                    },
+                    lastName: {
+                        required: "Last Name must be provided",
+                        maxlength: "Last Name may not be more than 50 characters long."
+                    },
+                    phoneNumber: {
+                        maxlength: "Phone may not be more than 25 characters long."
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+
+
+        $(".selectRequesterMethod")
+            .change(function () {
+                setEditRequesterToggle();
+            });
+
+
+        $("#editRequesterLink")
+            .click(function () {
+                setEditRequesterToggle();
+                $("#editRequester").dialog("open");
+            });
+
+
+        @* $("#editRequesterEmailList")
+        .autocomplete({
+            source: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Person"})',
+            minLength: 2,
+            select: function (event, ui) {
+                fillRequesterDetails(ui.item);
+            }
+        })
+        .data("ui-autocomplete")._renderItem = function (ul, item) {
+            var name = item.LastName + ", " + item.FirstName;
+            var email = item.Email.toLowerCase();
+            var text = email + " (" + name + ")";
+            return $("<li>")
+              .append("<a>" + text + "</a>")
+              .appendTo(ul);
+        };*@
+        
+        @*$("#editRequesterBadgeNumberList")
+        .autocomplete({
+            source:
+                '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Person"})' +
+                '?$filter=BadgeNumber ne null',
+            minLength: 2,
+            select: function (event, ui) {
+                fillRequesterDetails(ui.item);
+            }
+        })
+        .data("ui-autocomplete")._renderItem = function (ul, item) {
+            var name = item.LastName + ", " + item.FirstName;
+            var text = item.BadgeNumber + " (" + name + ")";
+            return $("<li>")
+                .append("<a>" + text + "</a>")
+                .appendTo(ul);
+
+        };*@
+        
+        $("#editRequesterEmailList")
+            .autocomplete({
+                source: function (request, response) {
+                    $.post('@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AvailableEmails"})',
+                        { id: '@Model.Id', search: request.term, maxResults: 12 },
+                        'jsonp'
+                    )
+                    .success(function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.Email.toLowerCase() + " (" + item.LastName + ", " + item.FirstName + ")",
+                                value: item
+                            };
+                        }));
+                    })
+                    .fail(function (data) { alert("Error in reaching web api."); });
+                },
+                minLength: 3,
+                select: function (event, ui) {
+                    fillRequesterDetails(ui.item.value);
+                    $(this).val(''); return false;
+                }
+            });
+
+        $("#editRequesterBadgeNumberList")
+            .autocomplete({
+                source: function (request, response) {
+                    $.post('@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AvailableBadgeNumbers"})',
+                        { id: '@Model.Id', search: request.term, maxResults: 12 },
+                        'jsonp'
+                    )
+                    .success(function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.BadgeNumber + " (" + item.LastName + ", " + item.FirstName + ")",
+                                value: item
+                            };
+                        }));
+                    })
+                    .fail(function (data) { alert("Error in reaching web api."); });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    fillRequesterDetails(ui.item.value);
+                    $(this).val(''); return false;
+                }
+            });
+        
+        
+    }
+
+
+    function fillNewRequesterBuildingList() {
+        var currentLocation = $("#newRequesterLocationList").val();
+        var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Building"})' + '?$filter=LocationId eq ' + currentLocation;
+        var options = $("#newRequesterBuildingList");
+        options.empty();
+        $.getJSON(apiUrl, function (data) {
+            $.each(data, function (index, item) {
+                options.append($("<option />").val(item.Id).text(item.Name));
+            });
+            $("#newRequesterBuildingDiv").toggle($("#newRequesterBuildingList>option").size() > 0);
+        });
+    }
+
+
+    function fillRequesterDetails(person) {
+        $("#newRequesterId").val(person.Id);
+        $("#newRequesterEmail").val(person.Email);
+        $("#newRequesterBadgeNumber").val(person.BadgeNumber);
+        $("#newRequesterFirstName").val(person.FirstName);
+        $("#newRequesterLastName").val(person.LastName);
+        $("#newRequesterPhone").val(person.Phone);
+        $("#newRequesterLocationList").val(person.LocationId);
+        
+        fillNewRequesterBuildingList();
+        if (person.BuildingId != null) {
+            $("#newRequesterBuildingList").val(person.BuildingId);
+        }
+    }
+
+
+
+    function setEditRequesterToggle() {
+        var method = $('input.selectRequesterMethod:checked').val();
+        var emailList = $("#editRequesterEmailList");
+        var badgeList = $("#editRequesterBadgeNumberList");
+        var newFields = $(".newRequesterField");
+
+        newFields.val('');
+        $("#newRequesterLocationList").prop('selectedIndex', 0);
+        fillNewRequesterBuildingList();
+
+        enable(emailList, method == "email");
+        enable(badgeList, method == "badgeNumber");
+        enable(newFields, method == "new");
+    }
+    
+</script>
+
+
+<h3>Requester</h3> 
+<div style="float: none; padding:10px 0;">
+    <div style="float: left;">
+        <div class="display-label" style="clear:both; padding-bottom: 10px;">
+            <label for="readRequesterName">Name</label> 
+        </div>
+        <div class="display-label" style="clear:both;">
+            <label for="readRequesterBadgeNumber">Badge #</label> 
+        </div>
+    </div>
+    <div style="float: left; padding-left: 10px;">
+        <div id="readRequesterName" class="display-field" style="clear:both; padding-bottom: 10px;">
+            @string.Format("{0}, {1}",
+                           Model.Requester.LastName,
+                           Model.Requester.FirstName
+                 )
+        </div>
+        <div id="readRequesterBadgeNumber" class="display-field" style="clear:both;">
+            @Model.Requester.BadgeNumber
+        </div> 
+    </div>
+    <div style="float: left; padding-left: 10px;">
+        <div class="display-label" style="clear:both; padding-bottom: 10px;">
+            <label for="readRequesterEmail">Email</label> 
+        </div>
+        <div class="display-label" style="clear:both;">
+            <label for="readRequesterPhone">Phone</label> 
+        </div>
+    </div>
+    <div style="float: left; padding-left: 10px;">
+        <div id="readRequesterEmail" class="display-field" style="clear:both; padding-bottom: 10px;">
+            <a href="mailto:@Model.Requester.Email">@Model.Requester.Email</a>
+        </div>
+        <div id="readRequesterPhone" class="display-field" style="clear:both;">
+            <a href="tel:@Model.Requester.Phone">@Model.Requester.Phone</a>
+        </div> 
+    </div>
+</div>
+
+<div style="clear: both; padding-top: 10px">
+    <a id="editRequesterLink" class="buttonLink">
+        <img class="buttonLink" src="/Images/icons/Edit/Edit_16x16.png" alt="Change Requester" />Change
+    </a>
+</div>
+
+<div id="editRequester" title="Edit Requester">
+    @using (Html.BeginForm("SetRequester", "Meeting",
+        method: FormMethod.Post,
+        routeValues: new { meetingId = Model.Id },
+        htmlAttributes: new { id = "editRequesterForm" }
+    )) {
+        @Html.AntiForgeryToken()
+
+        <fieldset>
+            <legend>Edit the Meeting Requester</legend>
+            <div style="float: left;">
+                <input type="radio" class="selectRequesterMethod" name="method" value="email" checked="checked" >Find by Email:<br/>
+                <input id="editRequesterEmailList" name="emailInput" />
+                <br/>
+
+                <input type="radio" class="selectRequesterMethod" name="method" value="badgeNumber">Find by Badge #:<br/>
+                <input type="text" id="editRequesterBadgeNumberList" name="badgeNumberInput" />
+                <br/>
+
+                <input type="radio" class="selectRequesterMethod" name="method" value="new">New Person:
+
+            </div>
+            <div style="float: left;">
+                <input type="hidden" id="newRequesterId" name="personId"/>
+                <input type="hidden" name="meetingId" value="@(Model.Id)"  />
+
+                <div class="editor-label"><label for="email">Email</label></div>
+                <div class="editor-field">
+                    <input type="text" id="newRequesterEmail" class="newRequesterField" name="email" maxlength="50">
+                </div>
+
+                <div class="editor-label"><label for="badgeNumber">Badge #</label></div>
+                <div class="editor-field">
+                    <input type="text" id="newRequesterBadgeNumber" class="newRequesterField" name="badgeNumber" maxlength="6">
+                </div>
+
+                <div class="editor-label"><label for="firstName">First Name</label></div>
+                <div class="editor-field">
+                    <input type="text" id="newRequesterFirstName" class="newRequesterField" name="firstName" maxlength="50">
+                </div>
+
+                <div class="editor-label"><label for="lastName">Last Name</label></div>
+                <div class="editor-field">
+                    <input type="text" id="newRequesterLastName" class="newRequesterField" name="lastName" maxlength="50">
+                </div>
+
+                <div class="editor-label"><label for="phoneNumber">Phone</label></div>
+                <div class="editor-field">
+                    <input type="text" id="newRequesterPhone" class="newRequesterField" name="phoneNumber" maxlength="25">
+                </div>
+
+                <div class="editor-label"><label for="locationId">Location</label></div>
+                <div class="editor-field">
+                    <select id="newRequesterLocationList" name="locationId" class="newRequesterField"></select>
+                </div>
+
+                <div id="newRequesterBuildingDiv">
+                    <div class="editor-label"><label for="buildingId">Building</label></div>
+                    <div class="editor-field">
+                        <select id="newRequesterBuildingList" name="buildingId" class="newRequesterField"></select>
+                    </div>
+                </div>
+            </div>
+            <div id="requesterErrors"></div>
+        </fieldset>
+    }
+</div>

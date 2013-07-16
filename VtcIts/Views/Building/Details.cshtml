@@ -1,0 +1,29 @@
+﻿@model VtcIts.Models.Building
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Building</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LocationId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LocationId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

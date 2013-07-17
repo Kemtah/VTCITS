@@ -68,7 +68,8 @@ namespace VtcIts.Controllers
 			string endDateTime,
 			string description,
 			string footprintsTicket,
-			int techId,
+            bool isBillable,
+            int techId,
 			int? requesterId,
 			int source,
 			string email,
@@ -77,17 +78,25 @@ namespace VtcIts.Controllers
 			string lastName,
 			string phoneNumber,
 			int? locationId,
-			int? buildingId
+            int? buildingId,
+            int timeZoneOffset = 0
 		) {
+
+            var serverOffset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+            var diff = ((timeZoneOffset / 60) + serverOffset.Hours) * -1;
+            var start = DateTime.Parse(startDateTime).AddHours(diff);
+            var end = DateTime.Parse(endDateTime).AddHours(diff);
+
 			var meeting = db.Meetings.Create();
 			meeting.Title = title;
 			meeting.Description = description;
 			meeting.FootprintsTicket = footprintsTicket;
 			meeting.TechnicianId = techId;
-			meeting.Start = DateTime.Parse(startDateTime);
-			meeting.End = DateTime.Parse(endDateTime);
+            meeting.Start = start;
+            meeting.End = end;
 			meeting.Notes = string.Empty;
 			meeting.Created = DateTime.Now;
+		    meeting.Billable = isBillable;
 			meeting.Source = (MeetingRequestSource)source;
 
 			var person = (requesterId.HasValue)
@@ -129,16 +138,22 @@ namespace VtcIts.Controllers
 			string footprintsTicket,
 			int techId,
 			bool isBillable,
-			string notes
+			string notes,
+			int timeZoneOffset = 0
 		) {
+		    var serverOffset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now);
+            var diff = ((timeZoneOffset/60) + serverOffset.Hours) * -1;
+            var start = DateTime.Parse(startDateTime).AddHours(diff);
+            var end = DateTime.Parse(endDateTime).AddHours(diff);
+		    
 			var meeting = db.Meetings.Find(meetingId);
 			meeting.Title = title;
 			meeting.Description = description;
 			meeting.Notes = notes;
 			meeting.FootprintsTicket = footprintsTicket;
 			meeting.TechnicianId = techId;
-			meeting.Start = DateTime.Parse(startDateTime);
-			meeting.End = DateTime.Parse(endDateTime);
+			meeting.Start = start;
+			meeting.End = end;
 			meeting.Billable = isBillable;
 
 			db.Entry(meeting).State = EntityState.Modified;

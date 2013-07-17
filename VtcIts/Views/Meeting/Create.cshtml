@@ -18,6 +18,7 @@
         var requesterSelected = false;
 
         $(function() {
+            $('#timeZoneOffset').val(now.getTimezoneOffset());
 
             // Load data if that's what you're doin'
             // -------------------------------------------------------------------
@@ -210,6 +211,13 @@
                 .change(function() {
                     setEditRequesterToggle();
                 });
+
+
+            $('#isBillableCheckbox')
+            .change(function () {
+                $('#isBillableHidden').val($(this).prop('checked'));
+            });
+
 
 
             // Click event handlers
@@ -459,6 +467,9 @@
 
         <fieldset>
             <legend>Meeting</legend>
+            
+            <input type='hidden' id='timeZoneOffset' name='timeZoneOffset' />
+
             <div class='editor-label'>
                 <label for='title'>Title</label>
             </div>
@@ -521,6 +532,14 @@
             </div>
             <div class='editor-field'>
                 <input type='text' id='footprintsTicket' name='footprintsTicket' class='details' maxlength="50" />
+            </div>
+            
+            <div class='editor-label'>
+                <label for='isBillable'>Billable?</label>
+            </div>
+            <div class='editor-field'>
+                <input type="hidden" id="isBillableHidden" name="isBillable" value="@Model.Billable.ToString()" />
+                <input type="checkbox" id="isBillableCheckbox" />  &nbsp;
             </div>
             
             <div class='editor-label'>

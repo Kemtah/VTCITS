@@ -16,6 +16,7 @@ namespace VtcIts.Models {
                     break;
                 case MeetingStatus.Closed:
                 case MeetingStatus.Cancelled:
+                case MeetingStatus.NoShow:
                     date = meeting.Closed;
                     break;
             }

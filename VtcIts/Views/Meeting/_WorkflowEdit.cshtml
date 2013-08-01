@@ -43,13 +43,28 @@
         } else if (Model.Status == MeetingStatus.InProgress) {
         <text>
             <a class="buttonLink"
-               href='javascript:applyWorkflow(2);' 
-               title='Cancel this meeting'
+            href='javascript:applyWorkflow(2);' 
+            title='Cancel this meeting'
             >
                 <img class="buttonLink" src="/Images/icons/Stop/Stop_16x16.png" alt="Close" />Close
             </a>
+            <a class="buttonLink"
+                href='javascript:applyWorkflow(4);' 
+                title="This meeting was No-Show'd"
+                >
+                <img class="buttonLink" src="/Images/icons/Negative/Negative_16x16.png" alt="No-Show" />No-Show
+            </a>
         </text>
         } else if (Model.Status == MeetingStatus.Cancelled) {
+        <text>
+            <a class="buttonLink"
+               href='javascript:applyWorkflow(0);' 
+               title='Reopen this meeting'
+            >
+                <img class="buttonLink" src="/Images/icons/Undo/Undo_16x16.png" alt="Reopen" />Reopen
+            </a> 
+        </text>
+        } else if (Model.Status == MeetingStatus.NoShow) {
         <text>
             <a class="buttonLink"
                href='javascript:applyWorkflow(0);' 

@@ -186,18 +186,16 @@ namespace VtcIts.Controllers
 			var changed = false;
 			switch (meeting.Status) {
 				case MeetingStatus.BeforeStart:
-					if (toStatus == MeetingStatus.InProgress) {
+					if (toStatus == MeetingStatus.InProgress ||
+                        toStatus == MeetingStatus.Cancelled) {
 						meeting.Status = toStatus;
 						meeting.Started = DateTime.Now;
-						changed = true;
-					} else if (toStatus == MeetingStatus.Cancelled) {
-						meeting.Status = toStatus;
-						meeting.Closed = DateTime.Now;
 						changed = true;
 					}
 					break;
 				case MeetingStatus.InProgress:
-					if (toStatus == MeetingStatus.Closed) {
+					if (toStatus == MeetingStatus.Closed ||
+                        toStatus == MeetingStatus.NoShow) {
 						meeting.Status = toStatus;
 						meeting.Closed = DateTime.Now;
 						changed = true;
@@ -210,6 +208,13 @@ namespace VtcIts.Controllers
 						changed = true;
 					}
 					break;
+                case MeetingStatus.NoShow:
+                    if (toStatus == MeetingStatus.BeforeStart) {
+                        meeting.Status = toStatus;
+                        meeting.Closed = null;
+                        changed = true;
+                    }
+                    break;
 			}
 			if (changed) {
 				db.Entry(meeting).State = EntityState.Modified;

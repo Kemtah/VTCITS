@@ -1,4 +1,5 @@
 ﻿namespace VtcIts {
+
     public enum ParticipantType {
         Physical = 0,
         Virtual = 1
@@ -18,7 +19,9 @@
         [EnumPrintText("In Progress")]
         InProgress = 1,
         Closed = 2,
-        Cancelled = 3
+        Cancelled = 3,
+        [EnumPrintText("No-Show")]
+        NoShow = 4
     }
 
     public enum Ternary {

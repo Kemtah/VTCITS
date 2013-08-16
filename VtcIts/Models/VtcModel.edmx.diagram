@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="29862a3dcb9b4334948f39c6acccef4f" Name="Diagram1" ZoomLevel="59">
+      <Diagram DiagramId="29862a3dcb9b4334948f39c6acccef4f" Name="Diagram1" ZoomLevel="63">
         <EntityTypeShape EntityType="VtcModel.Building" Width="1.5" PointX="3.25" PointY="15" />
         <EntityTypeShape EntityType="VtcModel.ExternalLocation" Width="1.5" PointX="8.25" PointY="15" />
         <EntityTypeShape EntityType="VtcModel.KemtahTech" Width="1.5" PointX="9.75" PointY="18.75" />
@@ -25,6 +25,8 @@
         <AssociationConnector Association="VtcModel.FK_Person_Location" />
         <EntityTypeShape EntityType="VtcModel.Series" Width="1.5" PointX="9.875" PointY="21.875" />
         <AssociationConnector Association="VtcModel.FK_Meeting_MeetingSeries" />
+        <EntityTypeShape EntityType="VtcModel.Ref_State" Width="1.5" PointX="10.5" PointY="15" />
+        <AssociationConnector Association="VtcModel.FK_ExternalLocation_ExternalLocation" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

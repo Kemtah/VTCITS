@@ -241,6 +241,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\AvailableEmailsController.cs" />
     <Compile Include="Controllers\Api\AvailableBadgeNumbersController.cs" />
+    <Compile Include="Controllers\Api\StateController.cs" />
     <Compile Include="Controllers\Api\EventController.cs" />
     <Compile Include="Controllers\Api\ExternalLocationController.cs" />
     <Compile Include="Controllers\Api\KemtahTechController.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Mail.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Api\Building.cs" />
+    <Compile Include="Models\Api\State.cs" />
     <Compile Include="Models\Api\MeetingSeries.cs" />
     <Compile Include="Models\Api\Event.cs" />
     <Compile Include="Models\Api\Person.cs" />
@@ -327,6 +329,9 @@
       <DependentUpon>VtcModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Person.cs">
+      <DependentUpon>VtcModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ref_State.cs">
       <DependentUpon>VtcModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Room.cs">

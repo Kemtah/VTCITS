@@ -16,11 +16,16 @@
           <EntitySet Name="MeetingRooms" EntityType="VtcModel.Store.MeetingRooms" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="MeetingSeries" EntityType="VtcModel.Store.MeetingSeries" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Person" EntityType="VtcModel.Store.Person" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Ref_State" EntityType="VtcModel.Store.Ref_State" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Room" EntityType="VtcModel.Store.Room" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Settings" EntityType="VtcModel.Store.Settings" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Building_Location" Association="VtcModel.Store.FK_Building_Location">
             <End Role="Location" EntitySet="Location" />
             <End Role="Building" EntitySet="Building" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ExternalLocation_ExternalLocation" Association="VtcModel.Store.FK_ExternalLocation_ExternalLocation">
+            <End Role="Ref_State" EntitySet="Ref_State" />
+            <End Role="ExternalLocation" EntitySet="ExternalLocation" />
           </AssociationSet>
           <AssociationSet Name="FK_Meeting_KemtahTech" Association="VtcModel.Store.FK_Meeting_KemtahTech">
             <End Role="KemtahTech" EntitySet="KemtahTech" />
@@ -89,6 +94,8 @@
           <Property Name="PointOfContact" Type="nvarchar" MaxLength="50" />
           <Property Name="TechnicalContactPhone" Type="nvarchar" MaxLength="25" />
           <Property Name="TechnicalContactEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateId" Type="int" />
         </EntityType>
         <EntityType Name="KemtahTech">
           <Key>
@@ -181,6 +188,14 @@
           <Property Name="LocationId" Type="int" Nullable="false" />
           <Property Name="BuildingId" Type="int" />
         </EntityType>
+        <EntityType Name="Ref_State">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nchar" MaxLength="30" />
+          <Property Name="Abbreviation" Type="nchar" MaxLength="2" />
+        </EntityType>
         <EntityType Name="Room">
           <Key>
             <PropertyRef Name="Id" />
@@ -210,6 +225,18 @@
             </Principal>
             <Dependent Role="Building">
               <PropertyRef Name="LocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ExternalLocation_ExternalLocation">
+          <End Role="Ref_State" Type="VtcModel.Store.Ref_State" Multiplicity="0..1" />
+          <End Role="ExternalLocation" Type="VtcModel.Store.ExternalLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_State">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExternalLocation">
+              <PropertyRef Name="StateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -468,6 +495,11 @@
           <FunctionImport Name="GetDetailedReport" ReturnType="Collection(VtcModel.GetDetailedReport_Result)" />
           <FunctionImport Name="GetSummaryReport" ReturnType="Collection(VtcModel.GetSummaryReport_Result)" />
           <FunctionImport Name="GetSettings" ReturnType="Collection(VtcModel.GetSettings_Result)" />
+          <EntitySet Name="Ref_State" EntityType="VtcModel.Ref_State" />
+          <AssociationSet Name="FK_ExternalLocation_ExternalLocation" Association="VtcModel.FK_ExternalLocation_ExternalLocation">
+            <End Role="Ref_State" EntitySet="Ref_State" />
+            <End Role="ExternalLocation" EntitySet="ExternalLocations" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Building">
           <Key>
@@ -491,6 +523,9 @@
           <Property Type="String" Name="TechnicalContactPhone" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="TechnicalContactEmail" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Meetings" Relationship="VtcModel.MeetingExternalLocations" FromRole="ExternalLocation" ToRole="Meeting" />
+          <Property Type="String" Name="City" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="StateId" />
+          <NavigationProperty Name="State" Relationship="VtcModel.FK_ExternalLocation_ExternalLocation" FromRole="ExternalLocation" ToRole="Ref_State" />
         </EntityType>
         <EntityType Name="KemtahTech">
           <Key>
@@ -818,6 +853,27 @@
           <Property Type="String" Name="SystemMailName" Nullable="false" MaxLength="250" />
           <Property Type="String" Name="SystemMailAddress" Nullable="false" MaxLength="250" />
         </ComplexType>
+        <EntityType Name="Ref_State">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Abbreviation" MaxLength="2" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="ExternalLocations" Relationship="VtcModel.FK_ExternalLocation_ExternalLocation" FromRole="Ref_State" ToRole="ExternalLocation" />
+        </EntityType>
+        <Association Name="FK_ExternalLocation_ExternalLocation">
+          <End Type="VtcModel.Ref_State" Role="Ref_State" Multiplicity="0..1" />
+          <End Type="VtcModel.ExternalLocation" Role="ExternalLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_State">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExternalLocation">
+              <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -836,6 +892,8 @@
           <EntitySetMapping Name="ExternalLocations">
             <EntityTypeMapping TypeName="VtcModel.ExternalLocation">
               <MappingFragment StoreEntitySet="ExternalLocation">
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
+                <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="TechnicalContactEmail" ColumnName="TechnicalContactEmail" />
                 <ScalarProperty Name="TechnicalContactPhone" ColumnName="TechnicalContactPhone" />
                 <ScalarProperty Name="PointOfContact" ColumnName="PointOfContact" />
@@ -1092,6 +1150,15 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Ref_State">
+            <EntityTypeMapping TypeName="VtcModel.Ref_State">
+              <MappingFragment StoreEntitySet="Ref_State">
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

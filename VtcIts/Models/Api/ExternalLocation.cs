@@ -9,6 +9,9 @@ namespace VtcIts.Models.Api {
         public string PointOfContact { get; set; }
         public string TechnicalContactPhone { get; set; }
         public string TechnicalContactEmail { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public int? StateId { get; set; }
         
 
         private ExternalLocation() { }
@@ -24,8 +27,13 @@ namespace VtcIts.Models.Api {
                     IpAddress = source.IpAddress,
                     PointOfContact = source.PointOfContact,
                     TechnicalContactPhone = source.TechnicalContactPhone,
-                    TechnicalContactEmail = source.TechnicalContactEmail
+                    TechnicalContactEmail = source.TechnicalContactEmail,
+                    City =  source.City
                 };
+                if (source.State != null) {
+                    output.State = source.State.Abbreviation;
+                    output.StateId = source.StateId;
+                }
             }
 
             return output;

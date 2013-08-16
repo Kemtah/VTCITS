@@ -12,23 +12,17 @@ namespace VtcIts.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ExternalLocation
+    public partial class Ref_State
     {
-        public ExternalLocation()
+        public Ref_State()
         {
-            this.Meetings = new HashSet<Meeting>();
+            this.ExternalLocations = new HashSet<ExternalLocation>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string IpAddress { get; set; }
-        public string PointOfContact { get; set; }
-        public string TechnicalContactPhone { get; set; }
-        public string TechnicalContactEmail { get; set; }
-        public string City { get; set; }
-        public Nullable<int> StateId { get; set; }
+        public string Abbreviation { get; set; }
     
-        public virtual ICollection<Meeting> Meetings { get; set; }
-        public virtual Ref_State State { get; set; }
+        public virtual ICollection<ExternalLocation> ExternalLocations { get; set; }
     }
 }

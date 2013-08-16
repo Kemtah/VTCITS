@@ -43,6 +43,21 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.TechnicalContactEmail)
     </div>
+    
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.City)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.City)
+    </div>
+    
+     <div class="display-label">
+         @Html.DisplayNameFor(model => model.State)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.State.Abbreviation)
+    </div>
+
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |

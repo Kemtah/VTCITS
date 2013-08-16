@@ -10,6 +10,8 @@
             <th>POC</th>
             <th>Tech Phone</th>
             <th>Tech Email</th>
+            <th>City</th>
+            <th>State</th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +26,8 @@
                 <td>
                     <a href="mailto:@item.TechnicalContactEmail">@Html.DisplayFor(modelItem => item.TechnicalContactEmail)</a>
                 </td>
+                <td>@Html.DisplayFor(modelItem => item.City)</td>
+                <td>@Html.DisplayFor(modelItem => item.State.Abbreviation)</td>
             </tr>
         }
     </tbody>

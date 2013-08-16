@@ -38,6 +38,7 @@ namespace VtcIts.Models
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Series> Series { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<Ref_State> Ref_State { get; set; }
     
         public virtual ObjectResult<AvailableBuildings_Result> AvailableBuildings(Nullable<int> meetingId)
         {

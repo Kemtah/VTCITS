@@ -4,85 +4,89 @@
 	// ------------------------------------------------------------------------
 	// For calling in $()
 	// ------------------------------------------------------------------------
-	function initialize_ExLocations() {
-		var meetingId = "@Model.Id";
+    function initialize_ExLocations() {
+        var meetingId = "@Model.Id";
 
-		$('.deleteExLocationLink')
-			.click(function () {
-				$(this).closest('form').submit();
-			});
+        $('.deleteExLocationLink')
+            .click(function() {
+                $(this).closest('form').submit();
+            });
 
-		$("#addMeetingExLocation").dialog({
-			autoOpen: false,
-			modal: true,
-			resizable: false,
-			width: 400,
-			buttons: {
-				"Add": function () {
-					$("#addMeetingExLocationForm").submit();
-				},
-				Cancel: function () {
-					$(this).dialog("close");
-				}
-			},
-			close: function () {
-			}
-		});
+        $("#addMeetingExLocation").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            width: 400,
+            buttons: {
+                "Add": function() {
+                    $("#addMeetingExLocationForm").submit();
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
+            },
+            close: function() {
+            }
+        });
 
 
-		$('#addMeetingExLocationForm')
-		.removeAttr("novalidate")
-		.validate({
-			errorLabelContainer: "#locationErrors",
-			wrapper: "li",
-			rules: {
-				name: { required: true, maxlength: 50 },
-				ipAddress: { maxlength: 50 },
-				pointOfContact: { maxlength: 50 },
-				technicalContactEmail : { email: true, maxlength: 50 },
-				technicalContactPhone: { maxlength: 25 }
-			},
-			messages: {
-				name: {
-					required: "Name must be provided",
-					maxlength: "Name may not be more than 50 characters long."
-				},
-				ipAddress: {
-					maxlength: "IP Address may not be more than 50 characters long."
-				},
-				technicalContactEmail: {
-					email: "Technical Contact Email must be a valid email address",
-					maxlength: "Technical Contact Email may not be more than 50 characters long."
-				},
-				technicalContactPhone: {
-					maxlength: "Technical Contact Phone may not be more than 25 characters long."
-				}
-			},
-			submitHandler: function (form) {
-				form.submit();
-			}
-		});
+        $('#addMeetingExLocationForm')
+            .removeAttr("novalidate")
+            .validate({
+                errorLabelContainer: "#locationErrors",
+                wrapper: "li",
+                rules: {
+                    name: { required: true, maxlength: 50 },
+                    ipAddress: { maxlength: 50 },
+                    pointOfContact: { maxlength: 50 },
+                    technicalContactEmail: { email: true, maxlength: 50 },
+                    technicalContactPhone: { maxlength: 25 }
+                },
+                messages: {
+                    name: {
+                        required: "Name must be provided",
+                        maxlength: "Name may not be more than 50 characters long."
+                    },
+                    ipAddress: {
+                        maxlength: "IP Address may not be more than 50 characters long."
+                    },
+                    technicalContactEmail: {
+                        email: "Technical Contact Email must be a valid email address",
+                        maxlength: "Technical Contact Email may not be more than 50 characters long."
+                    },
+                    technicalContactPhone: {
+                        maxlength: "Technical Contact Phone may not be more than 25 characters long."
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
 
-		$("#addMeetingExLocationLink")
-			.click(function () {
-				setAddExLocationToggle();
-				$("#addMeetingExLocation").dialog("open");
-			});
+        $("#addMeetingExLocationLink")
+            .click(function() {
+                setAddExLocationToggle();
+                $("#addMeetingExLocation").dialog("open");
+            });
 
-		$(".addExLocationMethod")
-			.change(function () {
-				setAddExLocationToggle();
-			});
+        $(".addExLocationMethod")
+            .change(function() {
+                setAddExLocationToggle();
+            });
+
+        $('#newMeeting_ExLocationList')
+            .change(function () {
+                fillExLocationDetails();
+            });
 
 		fillExLocationList(meetingId);
+	    fillStateList();
 	}
-
-
 
 	function setAddExLocationToggle() {
 		var method = $('input.addExLocationMethod:checked').val();
 		var disabled = 'disabled';
-		var existingList = $("#newMeeting_ExLocationist");
+		var existingList = $("#newMeeting_ExLocationList");
 		var newFields = $(".newExLocationField");
 
 		if (method == "existing") {
@@ -91,20 +95,22 @@
 				.attr(disabled, disabled)
 				.css('background-color', '#F3F3f3')
 				.val('');
+		    fillExLocationDetails();
 		} else {
 			existingList.attr(disabled, disabled);
 			newFields
 				.css('background-color', '#FFFFFF')
-				.removeAttr(disabled);
+				.removeAttr(disabled)
+				.val('');
 		}
 	}
 
 	// ------------------------------------------------------------------------
-	// Populates the building list with viable External Locations for this meeting
+	// Populates the External Location list with viable External Locations for this meeting
 	// ------------------------------------------------------------------------
 	function fillExLocationList(meetingId) {
-	    var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})' + '/AvailableExLocations';
-		var options = $('#newMeeting_ExLocationist');
+		var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "Meeting"})' + '/AvailableExLocations';
+		var options = $('#newMeeting_ExLocationList');
 		options.empty();
 		$.getJSON(apiUrl, function (data) {
 			$.each(data, function (index, item) {
@@ -112,6 +118,43 @@
 			});
 		});
 	}
+
+    // ------------------------------------------------------------------------
+    // Populates the building list with viable buildings for this meeting
+    // ------------------------------------------------------------------------
+    function fillStateList() {
+        var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "State"})';
+
+        var options = $('#newLocation_StateList');
+        options.empty();
+        $.getJSON(apiUrl, function (data) {
+            $.each(data, function (index, item) {
+                options.append($("<option />").val(item.Id).text(item.Abbreviation));
+            });
+        });
+    }
+    
+
+
+
+    function fillExLocationDetails() {
+        var exLocationId = $("#newMeeting_ExLocationList").val();
+        var apiUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "ExternalLocation"})' + '/' + exLocationId;
+
+        $.getJSON(apiUrl, function (data) {
+            
+            $("#newLocation_Name").val(data.Name);
+            $("#newLocation_IpAddress").val(data.IpAddress);
+            $("#newLocation_PointOfContact").val(data.PointOfContact);
+            $("#newLocation_TechnicalContactPhone").val(data.TechnicalContactPhone);
+            $("#newLocation_TechnicalContactEmail").val(data.TechnicalContactEmail);
+            $("#newLocation_City").val(data.City);
+            if (data.StateId != null) {
+                $("#newLocation_StateList").val(data.StateId);
+            }
+        });
+    }
+
 
 </script>
 
@@ -126,6 +169,8 @@
 			<th>POC</th>
 			<th>Tech Phone</th>
 			<th>Tech Email</th>
+			<th>City</th>
+			<th>State</th>
 			<th> </th>
 		</tr>
 	</thead>
@@ -141,6 +186,8 @@
 				<td>
 					<a href="mailto:@item.TechnicalContactEmail">@Html.DisplayFor(modelItem => item.TechnicalContactEmail)</a>
 				</td>
+				<td>@Html.DisplayFor(modelItem => item.City)</td>
+				<td>@Html.DisplayFor(modelItem => item.State.Abbreviation)</td>
 				<td>
 					@using (Html.BeginForm(
 						"DeleteLocation","Meeting", 
@@ -178,39 +225,52 @@
 		<fieldset>
 			<legend>Add ExLocation to Meeting</legend>
 			<input type="radio" class="addExLocationMethod" name="addExLocationMethod" value="existing" checked="checked" >
-			<select id="newMeeting_ExLocationist" name="exLocationId"></select>
+			<select id="newMeeting_ExLocationList" name="exLocationId"></select>
 			<br/>
 			<input type="radio" class="addExLocationMethod" name="addExLocationMethod" value="new">New:<br/>
 			<div>
 				<div class="editor-label"><label for="name">Name</label></div>
 				<div class="editor-field">
-					<input type="text" class="newExLocationField"  name="name" maxlength="50">
+					<input type="text" id="newLocation_Name" class="newExLocationField"  name="name" maxlength="50">
 				</div>
 			</div>
 			<div>
 				<div class="editor-label"><label for="ipAddress">IP Address</label></div>
 				<div class="editor-field">
-					<input type="text" class="newExLocationField" name="ipAddress" maxlength="50">
+					<input type="text" id="newLocation_IpAddress" class="newExLocationField" name="ipAddress" maxlength="50">
 				</div>
 			</div>
 			<div>
 				<div class="editor-label"><label for="pointOfContact">Point of Contact</label></div>
 				<div class="editor-field">
-					<input type="text" class="newExLocationField" name="pointOfContact" maxlength="50">
+					<input type="text" id="newLocation_PointOfContact" class="newExLocationField" name="pointOfContact" maxlength="50">
 				</div>
 			</div>
 			<div>
 				<div class="editor-label"><label for="technicalContactPhone">Technical Contact Phone</label></div>
 				<div class="editor-field">
-					<input type="text" class="newExLocationField" name="technicalContactPhone" maxlength="50">
+					<input type="text" id="newLocation_TechnicalContactPhone" class="newExLocationField" name="technicalContactPhone" maxlength="50">
 				</div>
 			</div>
 			<div>
 				<div class="editor-label"><label for="technicalContactEmail">Technical Contact Email</label></div>
 				<div class="editor-field">
-					<input type="text" class="newExLocationField" name="technicalContactEmail" maxlength="50">
+					<input type="text" id="newLocation_TechnicalContactEmail" class="newExLocationField" name="technicalContactEmail" maxlength="50">
 				</div>
 			</div>
+			<div>
+				<div class="editor-label"><label for="city">City</label></div>
+				<div class="editor-field">
+					<input type="text" id="newLocation_City" class="newExLocationField" name="city" maxlength="50">
+				</div>
+			</div>
+			<div>
+				<div class="editor-label"><label for="state">State</label></div>
+				<div class="editor-field">
+					<select id="newLocation_StateList" class="newExLocationField" name="state"></select>
+				</div>
+			</div>
+
 			<div id="locationErrors"></div>
 		</fieldset>
 	}
